@@ -1,0 +1,25 @@
+
+import { createStore } from "vuex";
+
+// Create a new store instance.
+const store = createStore({
+  state() {
+    return {
+ 
+    };
+  },
+  modules: {
+   
+  },
+  mutations: {
+ 
+  },
+
+  actions: {
+
+  },
+  getters:{
+
+  }
+});
+export default store;
