@@ -11,6 +11,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
   "dependencies": {
+    "bootstrap": "^5.2.0-beta1",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
     "vuex": "^4.0.2"
