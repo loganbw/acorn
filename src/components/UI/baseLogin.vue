@@ -22,8 +22,9 @@
           </div>
         </form>
       </div>
-      <div>
-        <span></span>
+      <div class="signupBlock">
+        <span>Don't have an account?</span>
+        <span> <a href="" >Sign Up</a></span>
       </div>
     </div>
   </div>
@@ -105,11 +106,11 @@
 
 .bg2 {
   animation-direction:alternate-reverse;
-  animation-duration:4s;
+  animation-duration:3s;
 }
 
 .bg3 {
-  animation-duration:5s;
+  animation-duration:6s;
 }
 @keyframes slide {
   0% {
@@ -119,6 +120,14 @@
   100% {
     transform:translateX(25%);
   }
+}
+
+.signupBlock{
+      display: flex;
+    color: #000;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-top:15%;
 }
 
   /* */
