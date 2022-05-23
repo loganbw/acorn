@@ -4,7 +4,7 @@
   <div class="bg bg3"></div>
   <div class="contain">
     <div>
-      <img class="loginImg" src="../../assets/Pokeball_Frame.svg" name="pokeball" />
+      <img class="loginImg" src="../../assets/Greatball_Frame.svg" name="greatball" />
       <div>
         <form class="formContain" action="submit">
           <div class="formInputs">
@@ -15,7 +15,12 @@
               name="username"
               class="inputForm"
             />
-            <input type="password" placeholder="password" id="pwd" name="pwd" class="inputForm" />
+            <div class="passwords">
+                <input type="password" placeholder="password" id="pwd" name="pwd" class="inputForm" />
+                <input type="password" placeholder="confirm password" id="pwdConfirm" name="pwdConfirm" class="inputForm" />
+
+            </div>
+            
           </div>
           <div class="formLogin">
             <input type="submit" value="Submit" class="inputButton" />
@@ -23,14 +28,26 @@
         </form>
       </div>
       <div class="signupBlock">
-        <span>Don't have an account?</span>
-        <span> <a href="">Sign Up</a></span>
+        <span> <a href="" @click="signup()">Forgot your password?</a></span>
+        <span> <a href="" @click="signup()">Have an Account?</a></span>
       </div>
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+      data(){
+          return{
+              isSignup: false
+          }
+      },
+      methods:{
+        signup(){
+            return isSignup = true;
+        }
+      }
+
+  };
 </script>
 <style scoped>
   .inputForm {
@@ -60,6 +77,10 @@
   .inputButton:active {
     background-color: #fec10b;
   }
+  .passwords{
+      display: flex;
+      width:81%;
+  }
   .loginImg {
     height: 400px;
     margin-top: 20%;
@@ -82,9 +103,12 @@
   }
   .formInputs {
     margin-top: -10% !important ;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
   .formLogin {
-    margin-top: 10%;
+    margin-top: 40px;
   }
 
   .energyImg {
