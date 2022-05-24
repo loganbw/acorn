@@ -11,6 +11,7 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
   "dependencies": {
+    "firebase": "^9.8.1",
     "pokemontcgsdk": "^2.0.0",
     "vue": "^3.2.33",
     "vue-router": "^4.0.14",
