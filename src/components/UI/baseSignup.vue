@@ -6,7 +6,7 @@
     <div>
       <img class="loginImg" src="../../assets/Greatball_Frame.svg" name="greatball" />
       <div>
-        <form class="formContain" action="submit">
+        <form class="formContain" @submit.prevent="signupWithPassword(this)">
           <div class="formInputs">
             <input
               type="text"
@@ -14,13 +14,26 @@
               id="username"
               name="username"
               class="inputForm"
+              v-model="email"
             />
             <div class="passwords">
-                <input type="password" placeholder="password" id="pwd" name="pwd" class="inputForm" />
-                <input type="password" placeholder="confirm password" id="pwdConfirm" name="pwdConfirm" class="inputForm" />
-
+              <input
+                type="password"
+                placeholder="password"
+                id="pwd"
+                name="pwd"
+                class="inputForm"
+                v-model="password"
+              />
+              <input
+                type="password"
+                placeholder="confirm password"
+                id="pwdConfirm"
+                name="pwdConfirm"
+                class="inputForm"
+                v-model="passwordConfirm"
+              />
             </div>
-            
           </div>
           <div class="formLogin">
             <input type="submit" value="Submit" class="inputButton" />
@@ -28,25 +41,53 @@
         </form>
       </div>
       <div class="signupBlock">
-        <span> <a href="" @click="signup()">Forgot your password?</a></span>
-        <span> <a href="" @click="signup()">Have an Account?</a></span>
+        <span> <a @click="signup()">Forgot your password?</a></span>
+        <span> <a @click="$emit('isSignupFlip', false)">Have an Account?</a></span>
       </div>
     </div>
   </div>
 </template>
 <script>
+  const userSignUp = () => {
+    aler("test");
+    console.log("nice");
+  };
   export default {
-      data(){
-          return{
-              isSignup: false
-          }
+    emits: ["isSignupFlip"],
+    data() {
+      return {
+        isSignup: false,
+        email: "",
+        password: "",
+        passwordConfirm: "",
+      };
+    },
+    methods: {
+      signup() {
+        return (isSignup = true);
       },
-      methods:{
-        signup(){
-            return isSignup = true;
+      //these alerts need to be a modal instead or a tiny error message under the pokeball
+      signupWithPassword(form) {
+        if (this.email == "") {
+          alert("Error: email cannot be blank!");
+          form.email.focus();
+          return false;
         }
-      }
-
+        if (this.password !== this.passwordConfirm) {
+          alert("Passwords do not match");
+          return;
+        }
+        if (this.password.match(/[a-z]/g) && this.password.match(/[A-Z]/g) && this.password.match(/[0-9]/g) && 
+                this.password.match(/[^a-zA-Z\d]/g) && this.password.length >= 8)
+            {
+                result = "Valid Password";
+            }
+            else{
+              alert("Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number.")
+            }
+        //maybe adding a email checker? like verify-email.org api
+      },
+    },
   };
 </script>
 <style scoped>
@@ -77,9 +118,9 @@
   .inputButton:active {
     background-color: #fec10b;
   }
-  .passwords{
-      display: flex;
-      width:81%;
+  .passwords {
+    display: flex;
+    width: 81%;
   }
   .loginImg {
     height: 400px;

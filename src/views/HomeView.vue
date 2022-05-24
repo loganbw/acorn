@@ -1,9 +1,9 @@
 <template>
   <div v-if="isSignup" >
-    <BaseSignup/>
+    <BaseSignup @is-signup-flip="isSignupFlip"/>
   </div>
   <div v-else>
-    <BaseLogin/>
+    <BaseLogin @is-signup-flip="isSignupFlip"/>
   </div>
 
 </template>
@@ -16,7 +16,18 @@
     data()
     {
       return{
-        isSignup: true
+        isSignup: false
+      }
+    },
+    methods:{
+      isSignupFlip(bool){
+        if(bool == true)
+        {
+          return this.isSignup = true
+        }
+        else{
+          return this.isSignup = false
+        }
       }
     }
    
