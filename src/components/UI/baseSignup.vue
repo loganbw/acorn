@@ -41,13 +41,14 @@
         </form>
       </div>
       <div class="signupBlock">
-        <span> <a @click="signup()">Forgot your password?</a></span>
+        <span> <a @click="forgotPassword()">Forgot your password?</a></span>
         <span> <a @click="$emit('isSignupFlip', false)">Have an Account?</a></span>
       </div>
     </div>
   </div>
 </template>
 <script>
+import createUser from "../../index.js";
   export default {
     emits: ["isSignupFlip"],
     data() {
@@ -59,8 +60,9 @@
       };
     },
     methods: {
-      signup() {
-        return (isSignup = true);
+      forgotPassword() {
+        alert("need module for password recovery")
+        return;
       },
       //these alerts need to be a modal instead or a tiny error message under the pokeball
       signupWithPassword(form) {
@@ -76,7 +78,8 @@
         if (this.password.match(/[a-z]/g) && this.password.match(/[A-Z]/g) && this.password.match(/[0-9]/g) && 
                 this.password.match(/[^a-zA-Z\d]/g) && this.password.length >= 8)
             {
-                result = "Valid Password";
+                createUser(this.email,this.password)
+                return alert("created")
             }
             else{
               alert("Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number.")
