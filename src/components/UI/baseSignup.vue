@@ -48,10 +48,6 @@
   </div>
 </template>
 <script>
-  const userSignUp = () => {
-    aler("test");
-    console.log("nice");
-  };
   export default {
     emits: ["isSignupFlip"],
     data() {
