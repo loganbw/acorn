@@ -6,16 +6,17 @@
     <div>
       <img class="loginImg" src="../../assets/Pokeball_Frame.svg" name="pokeball" />
       <div>
-        <form class="formContain" action="submit">
+        <form class="formContain" @submit.prevent="loginUser">
           <div class="formInputs">
             <input
               type="text"
-              placeholder="username"
-              id="username"
-              name="username"
+              placeholder="email"
+              id="email"
+              name="email"
               class="inputForm"
+              v-model="email"
             />
-            <input type="password" placeholder="password" id="pwd" name="pwd" class="inputForm" />
+            <input type="password" v-model="password" placeholder="password" id="pwd" name="pwd" class="inputForm" />
           </div>
           <div class="formLogin">
             <input type="submit" value="Submit" class="inputButton" />
@@ -24,16 +25,21 @@
       </div>
       <div class="signupBlock">
         <span>Don't have an account?</span>
-        <span> <a  @click="$emit('isSignupFlip', true)">Sign Up</a> </span>
+        <span> <a  @click="routeSign">Sign Up</a> </span>
       </div>
     </div>
   </div>
 </template>
 <script>
+
+import {signInUser} from "../../index.js";
+
   export default {
     data() {
       return {
         isSignup: false,
+        email: "",
+        password: ""
       };
     },
     methods: {},
@@ -42,6 +48,13 @@
         console.log("Test");
         return (flag = true);
       },
+      routeSign(){
+        return this.$router.push({name: 'Signup'})
+      },
+      loginUser(){
+        return signInUser(this.email, this.password)
+    
+      }
     },
     emits: ["isSignupFlip"],
   };
