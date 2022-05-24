@@ -25,7 +25,7 @@ async function getUsers(db) {
 }
 
 // function to create users
-async function createUser(email, password) {
+export default async function createUser(email, password) {
   const auth = getAuth();
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
