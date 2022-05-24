@@ -24,13 +24,27 @@
       </div>
       <div class="signupBlock">
         <span>Don't have an account?</span>
-        <span> <a href="">Sign Up</a></span>
+        <span> <a  @click="$emit('isSignupFlip', true)">Sign Up</a> </span>
       </div>
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  export default {
+    data() {
+      return {
+        isSignup: false,
+      };
+    },
+    methods: {},
+    computed: {
+      isSignupFlip(flag) {
+        console.log("Test");
+        return (flag = true);
+      },
+    },
+    emits: ["isSignupFlip"],
+  };
 </script>
 <style scoped>
   .inputForm {
