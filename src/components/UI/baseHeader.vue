@@ -22,13 +22,18 @@
     justify-content: space-between;
     margin: 1%;
   }
-  .rightContain{
-      display:flex;
-      align-items: center;
+  .rightContain {
+    display: flex;
+    align-items: center;
   }
   img {
     transform: rotate(90deg);
     height: 80px;
     width: 80px;
+  }
+  img:hover {
+    content: url("../../assets/Pokedex_Icon_Open.svg");
+    height: 100px;
+    width: 100px;
   }
 </style>
