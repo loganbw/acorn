@@ -5,6 +5,7 @@ const store = createStore({
   state() {
     return {
       user: { loggedIn: false, data: null },
+      isLoading: false
     };
   },
   modules: {},
@@ -16,6 +17,9 @@ const store = createStore({
     Set_User_Data(state, data) {
       state.user.data = data;
     },
+    Set_isLoading(state, flag){
+      state.isLoading = flag
+    }
   },
 
   actions: {
@@ -28,11 +32,18 @@ const store = createStore({
         commit("Set_User_Data", null);
       }
     },
+    fetchIsLoading(context, payload)
+    {
+      context.commit("Set_isLoading",payload);
+    }
   },
   getters: {
     getUserData(state) {
       return state.user;
     },
+    getIsLoading(state){
+      return state.isLoading;
+    }
   },
 });
 export default store;

@@ -44,12 +44,14 @@ export async function signInUser(email, password) {
       router.push({ name: "home" });
       alert(errorMessage);
     });
+    store.dispatch("isLoading",false)
 }
 
 //validates signed user
 auth.onAuthStateChanged((user) => {
   console.log("user " + user)
   store.dispatch("fetchUser", user);
+  
 });
 
 // function to create users
@@ -67,4 +69,5 @@ export async function createUser(email, password) {
       const errorMessage = error.message;
       // ..
     });
+    store.dispatch("fetchIsLoading", false);
 }
