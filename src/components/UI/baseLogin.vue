@@ -51,18 +51,8 @@ import {signInUser} from "../../index.js";
       routeSign(){
         return this.$router.push({name: 'Signup'})
       },
-      loginUser(){
+      loginUser(){ 
         signInUser(this.email, this.password)
-        if(){
-            this.$router.push({name: 'Play'})
-        }
-          
-        else
-        {
-          return
-        }
-          
-    
       }
     },
     emits: ["isSignupFlip"],
