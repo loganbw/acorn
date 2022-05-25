@@ -3,6 +3,7 @@ import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { moduleExpression } from "@babel/types";
 import { storeKey } from "vuex";
+import router  from './router';
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 const firebaseConfig = {
@@ -27,22 +28,23 @@ async function getUsers(db) {
 }
 
 export async function signInUser(email, password) {
+  
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      alert(user);
-      console.log(user)
+      router.push({name: 'Play'})
       
       // ...
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      router.push({name: 'home'})
       alert(errorMessage);
-      return false
+      
     });
-    return true
+  
 }
 
 // function to create users
