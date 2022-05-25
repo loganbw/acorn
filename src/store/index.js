@@ -4,25 +4,35 @@ import { createStore } from "vuex";
 const store = createStore({
   state() {
     return {
-      isLoggedIn: false,
+      user: { loggedIn: false, data: null },
     };
   },
   modules: {},
   mutations: {
-    isLoggedInFlag(state, payload) {
-      state.isLoggedIn = payload;
+    Set_Login_Value(state, value) {
+      state.user.loggedIn = value;
+      console.log(state)
+    },
+    Set_User_Data(state, data) {
+      state.user.data = data;
     },
   },
 
   actions: {
-    setIsLoggedInFlag(context, payload) {
-      context.commit("isLoggedInFlag", payload);
+    fetchUser({ commit }, user) {
+      console.log("fetchUser " + user)
+      commit("Set_Login_Value", user !== null);
+      if (user) {
+        commit("Set_User_Data", {email: user.email });
+      } else {
+        commit("Set_User_Data", null);
+      }
     },
   },
   getters: {
-    getIsLoggedInFlag(state){
-      return state.isLoggedIn;
-    }
+    getUserData(state) {
+      return state.user;
+    },
   },
 });
 export default store;
