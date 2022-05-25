@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { moduleExpression } from "@babel/types";
+import { storeKey } from "vuex";
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 const firebaseConfig = {
@@ -31,13 +32,17 @@ export async function signInUser(email, password) {
       // Signed in
       const user = userCredential.user;
       alert(user);
+      console.log(user)
+      
       // ...
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
       alert(errorMessage);
+      return false
     });
+    return true
 }
 
 // function to create users

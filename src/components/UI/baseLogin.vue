@@ -52,7 +52,16 @@ import {signInUser} from "../../index.js";
         return this.$router.push({name: 'Signup'})
       },
       loginUser(){
-        return signInUser(this.email, this.password)
+        signInUser(this.email, this.password)
+        if(){
+            this.$router.push({name: 'Play'})
+        }
+          
+        else
+        {
+          return
+        }
+          
     
       }
     },
