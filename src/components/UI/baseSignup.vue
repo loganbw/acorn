@@ -69,6 +69,7 @@ import {createUser} from "../../index.js";
       },
       //these alerts need to be a modal instead or a tiny error message under the pokeball
       signupWithPassword(form) {
+        
         if (this.email == "") {
           alert("Error: email cannot be blank!");
           form.email.focus();
@@ -81,6 +82,7 @@ import {createUser} from "../../index.js";
         if (this.password.match(/[a-z]/g) && this.password.match(/[A-Z]/g) && this.password.match(/[0-9]/g) && 
                 this.password.match(/[^a-zA-Z\d]/g) && this.password.length >= 8)
             {
+                store.dispatch("fetchIsLoading", true);
                 createUser(this.email,this.password)
                 alert("created")
                 return this.$router.push({name: 'home'})

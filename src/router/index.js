@@ -32,6 +32,7 @@ const router = createRouter({
   ],
 });
 router.beforeEach(async (to ,   from) => {
+  store.dispatch("fetchIsLoading", true);
   if (
     // make sure the user is authenticated
     store.getters.getUserData.isLoggedIn &&
@@ -41,8 +42,12 @@ router.beforeEach(async (to ,   from) => {
      to.name !== 'Signup'
   ) {
     // redirect the user to the login page
+    alert("Add small error for invaild user")
     return { name: 'home' }
   }
-})
+});
+router.afterEach(()=>{
+  store.dispatch("fetchIsLoading", false);
+});
 
 export default router;
