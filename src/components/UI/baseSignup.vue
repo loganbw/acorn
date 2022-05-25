@@ -42,13 +42,13 @@
       </div>
       <div class="signupBlock">
         <span> <a @click="forgotPassword()">Forgot your password?</a></span>
-        <span> <a @click="$emit('isSignupFlip', false)">Have an Account?</a></span>
+        <span> <a @click="routeLogin">Have an Account?</a></span>
       </div>
     </div>
   </div>
 </template>
 <script>
-import createUser from "../../index.js";
+import {createUser} from "../../index.js";
   export default {
     emits: ["isSignupFlip"],
     data() {
@@ -60,6 +60,9 @@ import createUser from "../../index.js";
       };
     },
     methods: {
+      routeLogin(){
+        return this.$router.push({name: 'home'})
+      },
       forgotPassword() {
         alert("need module for password recovery")
         return;
@@ -79,7 +82,8 @@ import createUser from "../../index.js";
                 this.password.match(/[^a-zA-Z\d]/g) && this.password.length >= 8)
             {
                 createUser(this.email,this.password)
-                return alert("created")
+                alert("created")
+                return this.$router.push({name: 'home'})
             }
             else{
               alert("Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number.")
