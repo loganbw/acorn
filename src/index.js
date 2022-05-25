@@ -1,9 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
+import { getFirestore, collection, getDocs, Firestore } from "firebase/firestore/lite";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { moduleExpression } from "@babel/types";
 import { storeKey } from "vuex";
-import router  from './router';
+import router from "./router";
+import store from "../src/store/index"
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 const firebaseConfig = {
@@ -27,25 +28,29 @@ async function getUsers(db) {
   return userList;
 }
 
+//signs in user
 export async function signInUser(email, password) {
-  
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      router.push({name: 'Play'})
-      
+      router.push({ name: "Play" });
+
       // ...
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
-      router.push({name: 'home'})
+      router.push({ name: "home" });
       alert(errorMessage);
-      
     });
-  
 }
+
+//validates signed user
+auth.onAuthStateChanged((user) => {
+  console.log("user " + user)
+  store.dispatch("fetchUser", user);
+});
 
 // function to create users
 export async function createUser(email, password) {
@@ -63,5 +68,3 @@ export async function createUser(email, password) {
       // ..
     });
 }
-
-
