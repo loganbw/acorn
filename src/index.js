@@ -1,6 +1,10 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs } from "firebase/firestore/lite";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { getFirestore, collection, getDocs, Firestore } from "firebase/firestore/lite";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { moduleExpression } from "@babel/types";
+import { storeKey } from "vuex";
+import router from "./router";
+import store from "../src/store/index"
 // Follow this pattern to import other Firebase services
 // import { } from 'firebase/<service>';
 const firebaseConfig = {
@@ -15,7 +19,7 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
-
+const auth = getAuth();
 // Get a list of users from your database
 async function getUsers(db) {
   const usersCol = collection(db, "Users");
@@ -24,9 +28,34 @@ async function getUsers(db) {
   return userList;
 }
 
+//signs in user
+export async function signInUser(email, password) {
+  signInWithEmailAndPassword(auth, email, password)
+    .then((userCredential) => {
+      // Signed in
+      const user = userCredential.user;
+      router.push({ name: "Play" });
+
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      router.push({ name: "home" });
+      alert(errorMessage);
+    });
+    store.dispatch("isLoading",false)
+}
+
+//validates signed user
+auth.onAuthStateChanged((user) => {
+  console.log("user " + user)
+  store.dispatch("fetchUser", user);
+  
+});
+
 // function to create users
-export default async function createUser(email, password) {
-  const auth = getAuth();
+export async function createUser(email, password) {
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
@@ -40,5 +69,5 @@ export default async function createUser(email, password) {
       const errorMessage = error.message;
       // ..
     });
-    
+    store.dispatch("fetchIsLoading", false);
 }
