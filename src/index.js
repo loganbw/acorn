@@ -71,3 +71,13 @@ export async function createUser(email, password) {
     });
     store.dispatch("fetchIsLoading", false);
 }
+
+export async function forgotPasswordReset(email){
+  fetchSignInMethodsForEmail(email).then(()=>{
+    firebase.auth().sendPasswordResetEmail(email)
+    store.dispatch("fetchIsEmailTrue",true)
+  }).catch((error)=>{
+      alert(error.message)
+  })
+  
+}
