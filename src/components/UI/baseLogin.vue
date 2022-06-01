@@ -60,11 +60,10 @@
     },
     computed: {
       isSignupFlip(flag) {
-        console.log("Test");
         return (flag = true);
       },
       routeSign() {
-        return this.$router.push({ name: "Signup" });
+        this.$router.push({ name: "Signup" });
       },
       loginUser() {
         store.dispatch("fetchIsLoading", true);
