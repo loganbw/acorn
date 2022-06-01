@@ -10,9 +10,9 @@
           <div class="formInputs">
             <input
               type="text"
-              placeholder="username"
-              id="username"
-              name="username"
+              placeholder="email"
+              id="email"
+              name="email"
               class="inputForm"
               v-model="email"
             />
@@ -96,7 +96,7 @@
     },
     methods: {
       routeLogin() {
-        return this.$router.push({ name: "home" });
+        this.$router.push({ name: "home" });
       },
       forgotPassword() {
         this.isForgotPassword = !this.isForgotPassword;
@@ -105,14 +105,27 @@
         // needs to have check for email not being correct before moving on
         forgotPasswordReset(this.lostEmail);
       },
+      validateEmail(email){
+        return email.match(
+    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+  );
+      },
       //these alerts need to be a modal instead or a tiny error message under the pokeball
       signupWithPassword(form) {
+        let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
+
         // Form hashing
 
         //
+       
         if (this.email == "") {
           alert("Error: email cannot be blank!");
           form.email.focus();
+          return false;
+        }
+        if(!this.validateEmail(this.email))
+        {
+          alert("Must enter in a vaild email")
           return false;
         }
         if (this.password !== this.passwordConfirm) {
@@ -129,7 +142,7 @@
           store.dispatch("fetchIsLoading", true);
           createUser(this.email, this.password);
           alert("created");
-          return this.$router.push({ name: "home" });
+          this.$router.push({ name: "home" });
         } else {
           alert(
             "Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number."
