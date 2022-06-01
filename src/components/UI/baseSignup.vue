@@ -45,10 +45,42 @@
         <span> <a @click="routeLogin">Have an Account?</a></span>
       </div>
     </div>
+    <div v-if="isForgotPassword">
+      <div v-if="!this.$store.getters.getIsEmailTrue">
+        <div class="modalBack" @click="forgotPassword"></div>
+        <form @submit.prevent="forgotPasswordSubmit">
+          <input
+            type="email"
+            placeholder="email"
+            id="emailReset"
+            name="emailReset"
+            class="emailReset"
+            v-model="lostEmail"
+          />
+          <input type="submit" value="Submit" class="inputButton" />
+        </form>
+      </div>
+      <div v-else>
+        <div class="modalBack" @click="forgotPassword"></div>
+        <form @submit.prevent="passwordCode">
+          <input
+            type="text"
+            placeholder="Reset Code"
+            id="emailReset"
+            name="emailReset"
+            class="emailReset"
+            v-model="emailCode"
+          />
+          <input type="submit" value="Submit" class="inputButton" />
+        </form>
+      </div>
+    </div>
   </div>
 </template>
 <script>
-import {createUser} from "../../index.js";
+  import { createUser } from "../../index.js";
+  import store from "../../store/index.js";
+
   export default {
     emits: ["isSignupFlip"],
     data() {
@@ -57,19 +89,27 @@ import {createUser} from "../../index.js";
         email: "",
         password: "",
         passwordConfirm: "",
+        lostEmail: "",
+        emailCode: "",
+        isForgotPassword: false,
       };
     },
     methods: {
-      routeLogin(){
-        return this.$router.push({name: 'home'})
+      routeLogin() {
+        return this.$router.push({ name: "home" });
       },
       forgotPassword() {
-        alert("need module for password recovery")
-        return;
+        this.isForgotPassword = !this.isForgotPassword;
+      },
+      forgotPasswordSubmit() {
+        // needs to have check for email not being correct before moving on
+        forgotPasswordReset(this.lostEmail);
       },
       //these alerts need to be a modal instead or a tiny error message under the pokeball
       signupWithPassword(form) {
-        
+        // Form hashing
+
+        //
         if (this.email == "") {
           alert("Error: email cannot be blank!");
           form.email.focus();
@@ -79,17 +119,22 @@ import {createUser} from "../../index.js";
           alert("Passwords do not match");
           return;
         }
-        if (this.password.match(/[a-z]/g) && this.password.match(/[A-Z]/g) && this.password.match(/[0-9]/g) && 
-                this.password.match(/[^a-zA-Z\d]/g) && this.password.length >= 8)
-            {
-                store.dispatch("fetchIsLoading", true);
-                createUser(this.email,this.password)
-                alert("created")
-                return this.$router.push({name: 'home'})
-            }
-            else{
-              alert("Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number.")
-            }
+        if (
+          this.password.match(/[a-z]/g) &&
+          this.password.match(/[A-Z]/g) &&
+          this.password.match(/[0-9]/g) &&
+          this.password.match(/[^a-zA-Z\d]/g) &&
+          this.password.length >= 8
+        ) {
+          store.dispatch("fetchIsLoading", true);
+          createUser(this.email, this.password);
+          alert("created");
+          return this.$router.push({ name: "home" });
+        } else {
+          alert(
+            "Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number."
+          );
+        }
         //maybe adding a email checker? like verify-email.org api
       },
     },

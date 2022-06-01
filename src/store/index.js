@@ -5,7 +5,8 @@ const store = createStore({
   state() {
     return {
       user: { loggedIn: false, data: null },
-      isLoading: false
+      isLoading: false,
+      isEmailTrue: false
     };
   },
   modules: {},
@@ -19,6 +20,10 @@ const store = createStore({
     },
     Set_isLoading(state, flag){
       state.isLoading = flag
+    },
+    Set_isEmailTrue(state, flag)
+    {
+      state.isEmailTrue = flag
     }
   },
 
@@ -35,6 +40,10 @@ const store = createStore({
     fetchIsLoading(context, payload)
     {
       context.commit("Set_isLoading",payload);
+    },
+    fetchIsEmailTrue(context,payload)
+    {
+      context.commit("Set_isEmailTrue",payload)
     }
   },
   getters: {
@@ -43,6 +52,9 @@ const store = createStore({
     },
     getIsLoading(state){
       return state.isLoading;
+    },
+    getIsEmailTrue(state){
+      return state.isEmailTrue
     }
   },
 });
