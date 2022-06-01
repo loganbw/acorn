@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, getDocs, Firestore } from "firebase/firestore/lite";
-import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,fetchSignInMethodsForEmail,sendPasswordResetEmail } from "firebase/auth";
 import { moduleExpression } from "@babel/types";
 import { storeKey } from "vuex";
 import router from "./router";
@@ -73,11 +73,13 @@ export async function createUser(email, password) {
 }
 
 export async function forgotPasswordReset(email){
-  fetchSignInMethodsForEmail(email).then(()=>{
-    firebase.auth().sendPasswordResetEmail(email)
-    store.dispatch("fetchIsEmailTrue",true)
+  fetchSignInMethodsForEmail(auth,email).then(()=>{
+    sendPasswordResetEmail(auth,email)
+    router.push({ name: "home" });
+    alert("Password reset link sent")
   }).catch((error)=>{
       alert(error.message)
+      console.log(error)
   })
-  
+  store.dispatch("fetchIsLoading", false);
 }
