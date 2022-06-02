@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import SignView from "../views/SignView.vue";
 import PlayView from "../views/PlayView.vue";
-import store from "../store/index"
+import DeckBuildView from "../views/DeckBuildView.vue";
+import store from "../store/index";
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
@@ -13,14 +14,19 @@ const router = createRouter({
     },
     {
       path: "/signup",
-      name:"Signup",
-      component: SignView
+      name: "Signup",
+      component: SignView,
     },
     {
       path: "/play",
-      name:"Play",
-      component: PlayView
-    }
+      name: "Play",
+      component: PlayView,
+    },
+    {
+      path: "/deck",
+      name: "Deck",
+      component: DeckBuildView,
+    },
     // {
     //   path: "/about",
     //   name: "about",
@@ -31,22 +37,21 @@ const router = createRouter({
     // },
   ],
 });
-router.beforeEach(async (to ,   from) => {
+router.beforeEach(async (to, from) => {
   store.dispatch("fetchIsLoading", true);
   if (
     // make sure the user is authenticated
     store.getters.getUserData.isLoggedIn &&
     //  Avoid an infinite redirect
-    to.name !== 'home'
-     &&
-     to.name !== 'Signup'
+    to.name !== "home" &&
+    to.name !== "Signup"
   ) {
     // redirect the user to the login page
-    alert("Add small error for invaild user")
-    return { name: 'home' }
+    alert("Add small error for invaild user");
+    return { name: "home" };
   }
 });
-router.afterEach(()=>{
+router.afterEach(() => {
   store.dispatch("fetchIsLoading", false);
 });
 
