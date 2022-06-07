@@ -14,8 +14,12 @@
 </template>
 <script>
 import BaseHeader from "../components/UI/baseHeader.vue"
+import store from "../store/index"
 export default {
-    components:{BaseHeader}
+    components:{BaseHeader},
+    mounted(){
+        store.dispatch("fetchSearchPokemon");
+    }
 }
 </script>
 <style scoped>

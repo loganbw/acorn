@@ -4,6 +4,7 @@ import SignView from "../views/SignView.vue";
 import PlayView from "../views/PlayView.vue";
 import DeckBuildView from "../views/DeckBuildView.vue";
 import store from "../store/index";
+
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
