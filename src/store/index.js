@@ -12,6 +12,7 @@ const store = createStore({
       isEmailTrue: false,
       searchedPokemon:[],
       deckedPokemon: [],
+      carddbLength: 0,
       decks:[]
     };
   },
@@ -31,11 +32,17 @@ const store = createStore({
     {
       state.isEmailTrue = flag
     },
+ 
     Set_Searched_Pokemon(state,value){
       //need to have a isLoading Flag there
-      pokemon.card.find('base1-4').then(card =>{
+      pokemon.card.where({q: 'name: charizard'}).then(card =>{
         console.log(card)
       })
+    },
+    Set_CarddbLength(state){
+      pokemon.card.all().then(cards =>{
+        state.carddbLength = cards.length;
+     })
     }
   },
 
@@ -65,6 +72,11 @@ const store = createStore({
     getUserData(state) {
       return state.user;
     },
+    Get_All_Pokemon(){
+      pokemon.card.all().then(cards =>{
+         console.log(cards)
+      })
+    },
     getIsLoading(state){
       return state.isLoading;
     },
@@ -73,6 +85,9 @@ const store = createStore({
     },
     getSearchedPokemon(state){
       return state.searchedPokemon;
+    },
+    getCarddbLength(state){
+      return state.carddbLength;
     }
   },
 });
