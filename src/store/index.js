@@ -42,6 +42,7 @@ const store = createStore({
     Set_CarddbLength(state){
       pokemon.card.all().then(cards =>{
         state.carddbLength = cards.length;
+        store.dispatch("fetchIsLoading", false);
      })
     }
   },
