@@ -1,6 +1,6 @@
 <template>
   <BaseHeader />
-   <loading
+  <loading
     class="load"
     v-model:active="this.$store.getters.getIsLoading"
     :can-cancel="false"
@@ -10,7 +10,7 @@
     <div class="cardContain">
       <ul>
         <li v-for="(card, index) in cardsLoaded" :key="index">
-            {{card}}
+          {{ card }}
         </li>
       </ul>
     </div>
@@ -22,20 +22,18 @@
   import store from "../store/index";
   import VueLoading from "vue-loading-overlay";
   export default {
-    components: { BaseHeader, Loading: VueLoading, },
-    data(){
-        return{
-            
-            cardsLength: 8
-        }
+    components: { BaseHeader, Loading: VueLoading },
+    data() {
+      return {
+        cardsLength: 8,
+      };
     },
     beforeCreate() {
-        store.dispatch("fetchIsLoading", true);
+      store.dispatch("fetchIsLoading", true);
     },
     mounted() {
       store.dispatch("fetchSearchPokemon");
       this.$store.getters.Get_All_Pokemon;
-    
     },
     methods: {
       loadMore() {
@@ -45,14 +43,14 @@
     },
     computed: {
       cardsLoaded() {
-        if(this.$store.getters.getIsLoading) return;
+        if (this.$store.getters.getIsLoading) return;
         return this.$store.getters.Get_All_Pokemon.slice(0, this.cardsLength);
       },
     },
   };
 </script>
 <style scoped>
-.load {
+  .load {
     position: relative;
     /* margin-top: -10%; */
     display: flex;
