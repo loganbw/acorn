@@ -13,7 +13,8 @@ const store = createStore({
       searchedPokemon:[],
       deckedPokemon: [],
       carddbLength: 0,
-      decks:[]
+      decks:[],
+      cards: []
     };
   },
   modules: {},
@@ -36,18 +37,18 @@ const store = createStore({
     Set_Searched_Pokemon(state,value){
       //need to have a isLoading Flag there
       pokemon.card.where({q: 'name: charizard'}).then(card =>{
-        console.log(card)
+        console.log("this card" + card)
       })
     },
     Set_CarddbLength(state){
       pokemon.card.all().then(cards =>{
         state.carddbLength = cards.length;
-        store.dispatch("fetchIsLoading", false);
+        
      }).catch(err=>{
        alert(err)
-       store.dispatch("fetchIsLoading", false);
      })
     }
+    
   },
 
   actions: {
@@ -76,10 +77,18 @@ const store = createStore({
     getUserData(state) {
       return state.user;
     },
-    Get_All_Pokemon(){
-      pokemon.card.all().then(cards =>{
-         console.log(cards)
+    Get_All_Pokemon(state){
+      pokemon.card.where({page:1}).then(cards =>{
+        console.log(cards)
+        state.cards.push(cards.data)
+        state.isLoading = false;
+        console.log(state.cards[0][0])
       })
+      
+      
+    },
+    getAllCards(state){
+      return state.cards[0];
     },
     getIsLoading(state){
       return state.isLoading;

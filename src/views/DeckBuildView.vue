@@ -8,11 +8,17 @@
   <div class="contain">
     <div class="searchContain"></div>
     <div class="cardContain">
-      <ul>
-        <li v-for="(card, index) in cardsLoaded" :key="index">
-          {{ card }}
+      <ul class="cardList">
+        <li class="cardLi" v-for="(card, index) in cardsLoaded" :key="index">
+          <div class="listDiv">
+            <img class="cardImg" :src="card.images.small" name="pokemon card img" />
+            <span class="cardName">{{ card.name }}</span>
+          </div>
         </li>
       </ul>
+      <div>
+        <span @click="loadMore" class="loadMore">Load More</span>
+      </div>
     </div>
     <div class="deckContain"></div>
   </div>
@@ -25,26 +31,28 @@
     components: { BaseHeader, Loading: VueLoading },
     data() {
       return {
-        cardsLength: 8,
+        cardsLength: 16,
       };
     },
     beforeCreate() {
       store.dispatch("fetchIsLoading", true);
     },
     mounted() {
-      store.dispatch("fetchSearchPokemon");
+      //store.dispatch("fetchSearchPokemon");
       this.$store.getters.Get_All_Pokemon;
     },
     methods: {
       loadMore() {
-        if (this.length > this.$store.getters.getCarddbLength) return;
-        this.length = this.length + 8;
+        if (this.cardsLength > this.$store.getters.getCarddbLength) return;
+        console.log("Loaded")
+        this.cardsLength = this.length + 8;
       },
     },
     computed: {
       cardsLoaded() {
         if (this.$store.getters.getIsLoading) return;
-        return this.$store.getters.Get_All_Pokemon.slice(0, this.cardsLength);
+        console.log("IsLoading")
+        return this.$store.getters.getAllCards.slice(0, this.cardsLength);
       },
     },
   };
@@ -64,5 +72,33 @@
     top: 0;
 
     z-index: 1;
+  }
+  .cardContain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .cardList {
+    display: flex;
+    list-style: none;
+    padding: 1%;
+    flex-wrap: wrap;
+  }
+  .cardLi {
+    margin: 1%;
+    width: 10%;
+  }
+  .cardImg {
+    width: 100%;
+  }
+  .listDiv {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+  }
+  .cardName {
+  }
+  .loadMore:hover{
+    
   }
 </style>
