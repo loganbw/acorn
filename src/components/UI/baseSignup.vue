@@ -60,25 +60,12 @@
           <input type="submit" value="Submit" class="inputButton" />
         </form>
       </div>
-      <div v-else>
-        <div class="modalBack" @click="forgotPassword"></div>
-        <form @submit.prevent="passwordCode">
-          <input
-            type="text"
-            placeholder="Reset Code"
-            id="emailReset"
-            name="emailReset"
-            class="emailReset"
-            v-model="emailCode"
-          />
-          <input type="submit" value="Submit" class="inputButton" />
-        </form>
-      </div>
+
     </div>
   </div>
 </template>
 <script>
-  import { createUser } from "../../index.js";
+  import { createUser,forgotPasswordReset } from "../../index.js";
   import store from "../../store/index.js";
 
   export default {
@@ -103,29 +90,26 @@
       },
       forgotPasswordSubmit() {
         // needs to have check for email not being correct before moving on
-        forgotPasswordReset(this.lostEmail);
+        if(this.validateEmail(this.lostEmail)){
+          store.dispatch("fetchIsLoading", true);
+          forgotPasswordReset(this.lostEmail);
+        }
+        
       },
-      validateEmail(email){
+      validateEmail(email) {
         return email.match(
-    /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-  );
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
       },
       //these alerts need to be a modal instead or a tiny error message under the pokeball
       signupWithPassword(form) {
-        let regex = new RegExp('[a-z0-9]+@[a-z]+\.[a-z]{2,3}');
-
-        // Form hashing
-
-        //
-       
         if (this.email == "") {
           alert("Error: email cannot be blank!");
           form.email.focus();
           return false;
         }
-        if(!this.validateEmail(this.email))
-        {
-          alert("Must enter in a vaild email")
+        if (!this.validateEmail(this.email)) {
+          alert("Must enter in a vaild email");
           return false;
         }
         if (this.password !== this.passwordConfirm) {
