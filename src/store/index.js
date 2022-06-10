@@ -100,7 +100,7 @@ const store = createStore({
       return state.searchedPokemon;
     },
     getCarddbLength(state){
-      return state.carddbLength;
+      return state.cards[0].length;
     }
   },
 });

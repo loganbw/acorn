@@ -17,7 +17,7 @@
         </li>
       </ul>
       <div>
-        <span @click="loadMore" class="loadMore">Load More</span>
+        <button @click="loadMore" class="loadMore">Load More</button>
       </div>
     </div>
     <div class="deckContain"></div>
@@ -43,9 +43,11 @@
     },
     methods: {
       loadMore() {
+        console.log("Loadmore Func "  + this.$store.getters.getCarddbLength)
         if (this.cardsLength > this.$store.getters.getCarddbLength) return;
         console.log("Loaded")
-        this.cardsLength = this.length + 8;
+        this.cardsLength = this.cardsLength + 8;
+        console.log("cardsLength " + this.cardsLength)
       },
     },
     computed: {
@@ -99,6 +101,9 @@
   .cardName {
   }
   .loadMore:hover{
-    
+    cursor: pointer;
+  }
+  .loadMore:active{
+    color:rgb(158, 156, 156)
   }
 </style>
