@@ -11,8 +11,10 @@
     "typecheck": "vue-tsc --noEmit -p tsconfig.vitest.json --composite false"
   },
   "dependencies": {
+
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0-beta1",
+
     "firebase": "^9.8.1",
     "pokemontcgsdk": "^2.0.0",
     "vue": "^3.2.33",
