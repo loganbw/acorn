@@ -18,7 +18,7 @@
           <div class="listDiv">
             <img
               class="cardImg"
-              @click="testCard(card)"
+              @click="addCard(card)"
               :src="card.images.large"
               name="pokemon card img"
             />
@@ -31,7 +31,7 @@
       </div>
     </div>
     <div class="deckContain">
-      <div>
+      <div class="deckAndCards">
         <div class="deckImg">
           <div class="deckName">
             <form>
@@ -46,39 +46,45 @@
           </div>
         </div>
         <div class="deckCards">
-          <span>Pokemon</span>
-          <ul class="pokemon">
-            <li
-              v-for="(card, index) in deckPokemon"
-              @mouseover="deckImageChange(card)"
-              @click="removeCardFromDeck(card)"
-              :key="index"
-            >
-              {{ card.name }}
-            </li>
-          </ul>
-          <span>Trainer</span>
-          <ul class="trainer">
-            <li
-              v-for="(card, index) in deckTrainer"
-              @mouseover="deckImageChange(card)"
-              @click="removeCardFromDeck(card)"
-              :key="index"
-            >
-              {{ card.name }}
-            </li>
-          </ul>
-          <span>Energy</span>
-          <ul class="energy">
-            <li
-              v-for="(card, index) in deckEnergy"
-              @mouseover="deckImageChange(card)"
-              @click="removeCardFromDeck(card)"
-              :key="index"
-            >
-              {{ card.name }}
-            </li>
-          </ul>
+          <div>
+            <span>Pokemon | {{ deckPokemon.length }}</span>
+            <ul class="pokemon">
+              <li
+                v-for="(card, index) in deckPokemon"
+                @mouseover="deckImageChange(card)"
+                @click="removeCardFromDeck(card)"
+                :key="index"
+              >
+                {{ card.name }}
+              </li>
+            </ul>
+          </div>
+          <div>
+            <span>Trainer | {{ deckTrainer.length }}</span>
+            <ul class="trainer">
+              <li
+                v-for="(card, index) in deckTrainer"
+                @mouseover="deckImageChange(card)"
+                @click="removeCardFromDeck(card)"
+                :key="index"
+              >
+                {{ card.name }}
+              </li>
+            </ul>
+          </div>
+          <div>
+            <span>Energy | {{ deckEnergy.length }}</span>
+            <ul class="energy">
+              <li
+                v-for="(card, index) in deckEnergy"
+                @mouseover="deckImageChange(card)"
+                @click="removeCardFromDeck(card)"
+                :key="index"
+              >
+                {{ card.name }}
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -135,19 +141,15 @@
     },
     methods: {
       loadMore() {
-        console.log("Loadmore Func " + this.$store.getters.getCarddbLength);
         if (this.cardsLength > this.$store.getters.getCarddbLength) return;
-        console.log("Loaded");
         this.cardsLength = this.cardsLength + 8;
-        console.log("cardsLength " + this.cardsLength);
       },
       searchPokemon() {
-        console.log(this.searchedPokemon);
         return store.dispatch("fetchSearchPokemon", this.searchedPokemon);
       },
       removeCardFromDeck(card) {
         const index = this.deck.cards.indexOf(card);
-        console.log(this.deck.cards)
+        console.log(this.deck.cards);
         if (index > -1) {
           this.deck.cards.splice(index, 1);
         }
@@ -169,11 +171,15 @@
             this.deckEnergy.splice(pokeE, 1);
           }
         }
-        this.deckImage = ''
-        
+        this.deckImage = "";
       },
-      testCard(card) {
+      addCard(card) {
         //add checks for building deck here
+        console.log(card);
+        if (this.deck.cards.length == 60) {
+          alert("Max Card limit for deck");
+          return;
+        }
         for (let index = 0; index < this.cardEnergy.length; index++) {
           if (card.name == this.cardEnergy[index]) {
             this.deck.cards.push(card);
@@ -181,24 +187,17 @@
             return;
           }
         }
-
         this.checkForCardDup(card);
-        console.log(this.deck);
-        //check for 4 limit card
-        //need to have a if for energy
       },
       deckImageChange(card) {
-        console.log(card.images.large);
         this.deckImage = card.images.small;
       },
       checkForCardDup(card) {
         let cardName = [];
         for (let index = 0; index < this.deck.cards.length; index++) {
           if (this.deck.cards[index].name == card.name) {
-            console.log("If check " + this.deck.cards[index].name);
             if (cardName.length < 3) {
               cardName.push(this.deck.cards[index].name);
-              console.log(cardName.length);
             } else {
               alert("Max of 4");
               return;
@@ -212,16 +211,17 @@
         if (card.supertype == "Pokémon") {
           this.deckPokemon.push(card);
         }
+        if (card.supertype == "Energy") {
+          this.deckEnergy.push(card);
+        }
       },
     },
     computed: {
       cardsLoaded() {
         if (this.$store.getters.getIsLoading) return;
-        console.log("IsLoading");
         return this.$store.getters.getAllCards.slice(0, this.cardsLength);
       },
       returnDeckImage() {
-        console.log(this);
         return this.deckImage;
       },
     },
@@ -284,5 +284,35 @@
   .searchContain {
     display: flex;
     justify-content: center;
+  }
+  .deckContain {
+    display: flex;
+    justify-content: center;
+    margin-top: 2%;
+    width: 80%;
+    padding:2%;
+  }
+  .deckImg {
+    display: flex;
+    flex-direction:column;
+    align-items:center;
+  }
+  .deckCards {
+    display: flex;
+    text-align:right;
+  }
+  .deckAndCards {
+    display: flex;
+  }
+  li{
+    list-style:none;
+  }
+  li:hover{
+    cursor:pointer;
+  }
+  .contain{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
   }
 </style>
