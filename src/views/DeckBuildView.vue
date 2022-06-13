@@ -48,20 +48,35 @@
         <div class="deckCards">
           <span>Pokemon</span>
           <ul class="pokemon">
-            <li  v-for="(card, index) in deckPokemon" @mouseover="deckImageChange(card)" :key="index">
-                {{card.name}}
+            <li
+              v-for="(card, index) in deckPokemon"
+              @mouseover="deckImageChange(card)"
+              @click="removeCardFromDeck(card)"
+              :key="index"
+            >
+              {{ card.name }}
             </li>
           </ul>
           <span>Trainer</span>
           <ul class="trainer">
-            <li  v-for="(card, index) in deckTrainer" :key="index">
-              {{card.name}}
+            <li
+              v-for="(card, index) in deckTrainer"
+              @mouseover="deckImageChange(card)"
+              @click="removeCardFromDeck(card)"
+              :key="index"
+            >
+              {{ card.name }}
             </li>
           </ul>
           <span>Energy</span>
           <ul class="energy">
-            <li  v-for="(card, index) in deckEnergy" :key="index">
-              {{card.name}}
+            <li
+              v-for="(card, index) in deckEnergy"
+              @mouseover="deckImageChange(card)"
+              @click="removeCardFromDeck(card)"
+              :key="index"
+            >
+              {{ card.name }}
             </li>
           </ul>
         </div>
@@ -94,10 +109,10 @@
         ],
         searchedPokemon: { name: "", format: "", cardType: "" },
         deck: { deckName: "deckName", cards: [] },
-        deckEnergy:[],
-        deckPokemon:[],
-        deckTrainer:[],
-        deckImage: '',
+        deckEnergy: [],
+        deckPokemon: [],
+        deckTrainer: [],
+        deckImage: "",
         cardEnergy: [
           "Fire Energy",
           "Figthing Energy",
@@ -130,6 +145,33 @@
         console.log(this.searchedPokemon);
         return store.dispatch("fetchSearchPokemon", this.searchedPokemon);
       },
+      removeCardFromDeck(card) {
+        const index = this.deck.cards.indexOf(card);
+        console.log(this.deck.cards)
+        if (index > -1) {
+          this.deck.cards.splice(index, 1);
+        }
+        if (card.supertype == "Pokémon") {
+          const pokeI = this.deckPokemon.indexOf(card);
+          if (index > -1) {
+            this.deckPokemon.splice(pokeI, 1);
+          }
+        }
+        if (card.supertype == "Trainer") {
+          const pokeT = this.deckTrainer.indexOf(card);
+          if (index > -1) {
+            this.deckTrainer.splice(pokeT, 1);
+          }
+        }
+        if (card.supertype == "Energy") {
+          const pokeE = this.deckEnergy.indexOf(card);
+          if (index > -1) {
+            this.deckEnergy.splice(pokeE, 1);
+          }
+        }
+        this.deckImage = ''
+        
+      },
       testCard(card) {
         //add checks for building deck here
         for (let index = 0; index < this.cardEnergy.length; index++) {
@@ -138,19 +180,16 @@
             this.deckEnergy.push(card);
             return;
           }
-          
         }
-       
-        
+
         this.checkForCardDup(card);
         console.log(this.deck);
         //check for 4 limit card
         //need to have a if for energy
       },
-      deckImageChange(card){
+      deckImageChange(card) {
         console.log(card.images.large);
         this.deckImage = card.images.small;
-        
       },
       checkForCardDup(card) {
         let cardName = [];
@@ -167,13 +206,11 @@
           }
         }
         this.deck.cards.push(card);
-        if(card.supertype == "Trainer")
-        {
-          this.deckTrainer.push(card)
+        if (card.supertype == "Trainer") {
+          this.deckTrainer.push(card);
         }
-        if(card.supertype == "Pokémon")
-        {
-          this.deckPokemon.push(card)
+        if (card.supertype == "Pokémon") {
+          this.deckPokemon.push(card);
         }
       },
     },
@@ -183,17 +220,16 @@
         console.log("IsLoading");
         return this.$store.getters.getAllCards.slice(0, this.cardsLength);
       },
-      returnDeckImage(){
-        console.log(this)
+      returnDeckImage() {
+        console.log(this);
         return this.deckImage;
-      }
-    
+      },
     },
-  watch:{
-    deckImage(){
-      return this.deckImage
-    }
-  }
+    watch: {
+      deckImage() {
+        return this.deckImage;
+      },
+    },
   };
 </script>
 <style scoped>
