@@ -6,21 +6,53 @@
     :can-cancel="false"
   ></loading>
   <div class="contain">
-    <div class="searchContain"></div>
+    <div class="searchContain">
+      <form @submit.prevent="searchPokemon">
+        <input v-model="searchedPokemon.name" placeholder="search pokemon" />
+        <img src="../assets/filter.svg" />
+      </form>
+    </div>
     <div class="cardContain">
       <ul class="cardList">
         <li class="cardLi" v-for="(card, index) in cardsLoaded" :key="index">
           <div class="listDiv">
-            <img class="cardImg" :src="card.images.small" name="pokemon card img" />
+            <img class="cardImg" :src="card.images.large" name="pokemon card img" />
             <span class="cardName">{{ card.name }}</span>
           </div>
         </li>
       </ul>
       <div>
-        <button @click="loadMore" class="loadMore">Load More</button>
+        <span @click="loadMore" class="loadMore">Load More</span>
       </div>
     </div>
-    <div class="deckContain"></div>
+    <div class="deckContain">
+      <div>
+        <div class="deckImg">
+          <div class="deckName">
+            <form>
+              <label></label>
+              <input placeholder="name deck" />
+            </form>
+          </div>
+          <img src="" />
+          <div class="deckButtons">
+            <button></button>
+            <button></button>
+          </div>
+        </div>
+        <div class="deckCards">
+          <ul class="pokemon">
+            <li></li>
+          </ul>
+          <ul class="trainer">
+            <li></li>
+          </ul>
+          <ul class="energy">
+            <li></li>
+          </ul>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -32,6 +64,8 @@
     data() {
       return {
         cardsLength: 16,
+        cardFormats: ["standard","Expanded","Unlimted"],
+        searchedPokemon:{name: '', format: '', type: ''},
       };
     },
     beforeCreate() {
@@ -43,17 +77,22 @@
     },
     methods: {
       loadMore() {
-        console.log("Loadmore Func "  + this.$store.getters.getCarddbLength)
+        console.log("Loadmore Func " + this.$store.getters.getCarddbLength);
         if (this.cardsLength > this.$store.getters.getCarddbLength) return;
-        console.log("Loaded")
+        console.log("Loaded");
         this.cardsLength = this.cardsLength + 8;
-        console.log("cardsLength " + this.cardsLength)
+        console.log("cardsLength " + this.cardsLength);
       },
+      searchPokemon()
+      {
+         console.log(this.searchedPokemon)
+          return store.dispatch("fetchSearchPokemon", this.searchedPokemon);
+      }
     },
     computed: {
       cardsLoaded() {
         if (this.$store.getters.getIsLoading) return;
-        console.log("IsLoading")
+        console.log("IsLoading"); 
         return this.$store.getters.getAllCards.slice(0, this.cardsLength);
       },
     },
@@ -100,10 +139,10 @@
   }
   .cardName {
   }
-  .loadMore:hover{
+  .loadMore:hover {
     cursor: pointer;
   }
-  .loadMore:active{
-    color:rgb(158, 156, 156)
+  .loadMore:active {
+    color: rgb(158, 156, 156);
   }
 </style>

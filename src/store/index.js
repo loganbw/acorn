@@ -35,9 +35,12 @@ const store = createStore({
     },
  
     Set_Searched_Pokemon(state,value){
-      //need to have a isLoading Flag there
-      pokemon.card.where({q: 'name: charizard'}).then(card =>{
-        console.log("this card" + card)
+      state.cards = []
+      state.isLoading = true
+      pokemon.card.where({q: 'name:' + value.name + ' legalities.unlimited:legal' }).then(card =>{
+        console.log(card.data)
+        state.cards.push(card.data)
+        state.isLoading = false
       })
     },
     Set_CarddbLength(state){
@@ -69,20 +72,20 @@ const store = createStore({
     {
       context.commit("Set_isEmailTrue",payload)
     },
-    fetchSearchPokemon(context,payload){
+    fetchSearchPokemon(context, payload){
       context.commit("Set_Searched_Pokemon",payload)
     }
+    
   },
   getters: {
     getUserData(state) {
       return state.user;
     },
     Get_All_Pokemon(state){
+      state.cards = []
       pokemon.card.where({page:1}).then(cards =>{
-        console.log(cards)
         state.cards.push(cards.data)
         state.isLoading = false;
-        console.log(state.cards[0][0])
       })
       
       
