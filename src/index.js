@@ -1,5 +1,6 @@
-import { initializeApp } from "firebase/app";
-import { getFirestore, collection, getDocs, Firestore } from "firebase/firestore/lite";
+
+import { initializeApp } from '@firebase/app';
+import { getFirestore, collection, getDocs, Firestore, setDoc, doc,updateDoc,FieldValue, arrayUnion, increment } from "firebase/firestore/lite";
 import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,fetchSignInMethodsForEmail,sendPasswordResetEmail } from "firebase/auth";
 import { moduleExpression } from "@babel/types";
 import { storeKey } from "vuex";
@@ -20,6 +21,8 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
+//const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
+
 // Get a list of users from your database
 async function getUsers(db) {
   const usersCol = collection(db, "Users");
@@ -51,16 +54,16 @@ export async function signInUser(email, password) {
 auth.onAuthStateChanged((user) => {
   console.log("user " + user)
   store.dispatch("fetchUser", user);
-  
+  setUserDoc(user)
 });
 
 // function to create users
 export async function createUser(email, password) {
+  const uid = '';
   createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
-      console.log(user);
       return user;
       // ...
     })
@@ -70,6 +73,24 @@ export async function createUser(email, password) {
       // ..
     });
     store.dispatch("fetchIsLoading", false);
+    console.log("UID " + uid)
+  
+}
+
+async function setUserDoc(user){
+  await setDoc(doc(db,"Users", user.uid),{
+    uid:user.uid,
+    deckId: 0,
+    email:user.email,
+    decks:[]
+  })
+}
+export async function updateUserDoc(uid, deck){
+  console.log(uid + ' '  + deck)
+  await updateDoc(doc(db,"Users", uid),{
+    decks: arrayUnion(deck)
+  })
+  console.log("done")
 }
 
 export async function forgotPasswordReset(email){

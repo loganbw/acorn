@@ -14,6 +14,9 @@
     },
     methods:{
        
+    },
+    mounted(){
+      console.log(this.$router)
     }
    
   };

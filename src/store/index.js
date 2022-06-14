@@ -59,7 +59,7 @@ const store = createStore({
       console.log("fetchUser " + user)
       commit("Set_Login_Value", user !== null);
       if (user) {
-        commit("Set_User_Data", {email: user.email });
+        commit("Set_User_Data", {email: user.email, uid: user.uid });
       } else {
         commit("Set_User_Data", null);
       }

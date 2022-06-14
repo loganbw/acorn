@@ -34,15 +34,15 @@
       <div class="deckAndCards">
         <div class="deckImg">
           <div class="deckName">
-            <form>
+            
               <label></label>
-              <input placeholder="name deck" />
-            </form>
+              <input v-model="deck.deckName" placeholder="name deck" />
+          
           </div>
           <img :src="returnDeckImage" />
           <div class="deckButtons">
-            <button></button>
-            <button></button>
+            <button @click="saveDeck">save</button>
+            <button @click="clearDecks">clear</button>
           </div>
         </div>
         <div class="deckCards">
@@ -94,6 +94,7 @@
   import BaseHeader from "../components/UI/baseHeader.vue";
   import store from "../store/index";
   import VueLoading from "vue-loading-overlay";
+  import { updateUserDoc } from "../index.js";
   export default {
     components: { BaseHeader, Loading: VueLoading },
     data() {
@@ -114,7 +115,7 @@
           "Grass",
         ],
         searchedPokemon: { name: "", format: "", cardType: "" },
-        deck: { deckName: "deckName", cards: [] },
+        deck: { deckName: "",deckCreated: new Date(), cards: [] },
         deckEnergy: [],
         deckPokemon: [],
         deckTrainer: [],
@@ -224,6 +225,27 @@
       returnDeckImage() {
         return this.deckImage;
       },
+      saveDeck() {
+        //pass in this.deck and the uid that is stored in the store as the document
+        if ( this.deckname == "") {
+          alert("need to name deck");
+        }
+        if (this.deck.cards.length === 60 && this.deckname != "") {
+          updateUserDoc(this.$store.getters.getUserData.data.uid, this.deck);
+          alert("saved deck");
+        } else {
+          console.log(this.deck.cards.length);
+          alert("deck not completed");
+        }
+      },
+      clearDecks() {
+        this.deck.cards = [];
+        this.deck.deckName = '';
+        this.deckEnergy = [];
+        this.deckTrainer = [];
+        this.deckPokemon = [];
+        alert("cleared deck");
+      },
     },
     watch: {
       deckImage() {
@@ -290,29 +312,29 @@
     justify-content: center;
     margin-top: 2%;
     width: 80%;
-    padding:2%;
+    padding: 2%;
   }
   .deckImg {
     display: flex;
-    flex-direction:column;
-    align-items:center;
+    flex-direction: column;
+    align-items: center;
   }
   .deckCards {
     display: flex;
-    text-align:right;
+    text-align: right;
   }
   .deckAndCards {
     display: flex;
   }
-  li{
-    list-style:none;
+  li {
+    list-style: none;
   }
-  li:hover{
-    cursor:pointer;
+  li:hover {
+    cursor: pointer;
   }
-  .contain{
-    display:flex;
-    flex-direction:column;
-    align-items:center;
+  .contain {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 </style>
