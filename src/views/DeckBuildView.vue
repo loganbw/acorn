@@ -9,7 +9,19 @@
     <div class="searchContain">
       <form @submit.prevent="searchPokemon">
         <input v-model="searchedPokemon.name" placeholder="search pokemon" />
-        <img src="../assets/filter.svg" />
+        <select v-model="searchedPokemon.format" name="format" id="formats">
+          <option value="" disabled selected>filter by format</option>
+            <option v-for="format in cardFormats" :value="format">{{format}}</option>
+        </select>
+         <select v-model="searchedPokemon.color" name="color" id="colors">
+           <option value="" disabled selected>filter by color</option>
+            <option v-for="color  in cardColor" :value="color">{{color}}</option>
+        </select>
+        <select v-model="searchedPokemon.typ" name="typ" id="typs">
+          <option value="" disabled selected>filter by type</option>
+            <option v-for="typ  in cardType " :value="typ">{{typ}}</option>
+        </select>
+        <button type="submit">search</button>
       </form>
     </div>
     <div class="cardContain">
@@ -26,7 +38,7 @@
           </div>
         </li>
       </ul>
-      <div>
+      <div v-if="cardslength > 16">
         <span @click="loadMore" class="loadMore">Load More</span>
       </div>
     </div>
@@ -105,7 +117,7 @@
         cardColor: [
           "Fire",
           "Figthing",
-          "Normal",
+          "Colorless",
           "Psychic",
           "Dark",
           "Electric",
@@ -114,7 +126,7 @@
           "Metal",
           "Grass",
         ],
-        searchedPokemon: { name: "", format: "", cardType: "" },
+        searchedPokemon: { name: "", format: "", typ: "", color:"" },
         deck: { deckName: "",deckCreated: new Date(), cards: [] },
         deckEnergy: [],
         deckPokemon: [],
@@ -146,7 +158,12 @@
         this.cardsLength = this.cardsLength + 8;
       },
       searchPokemon() {
-        return store.dispatch("fetchSearchPokemon", this.searchedPokemon);
+        console.log(this.searchedPokemon)
+        const name = this.searchedPokemon.name
+        const format =this.searchedPokemon.format 
+        const color =this.searchedPokemon.color 
+        const typ =this.searchedPokemon.typ
+        return store.dispatch("fetchSearchPokemon", {name, format , color , typ});
       },
       removeCardFromDeck(card) {
         const index = this.deck.cards.indexOf(card);
@@ -336,5 +353,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+  }
+  select{
+    color:black !important;
   }
 </style>
