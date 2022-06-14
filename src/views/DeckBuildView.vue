@@ -111,7 +111,11 @@
     components: { BaseHeader, Loading: VueLoading },
     data() {
       return {
+        //total amount of cards being shown at the start
         cardsLength: 16,
+        ////
+        //  This vars are for filtering and searching for cards
+        /// v
         cardFormats: ["standard", "Expanded", "Unlimted"],
         cardType: ["Pokemon", "Trainer", "Energy"],
         cardColor: [
@@ -127,11 +131,20 @@
           "Grass",
         ],
         searchedPokemon: { name: "", format: "", typ: "", color:"" },
+        /// ^
+        ///////////////
+
+        // object for deck
         deck: { deckName: "",deckCreated: new Date(), cards: [] },
+        // array to display energies seperatly 
         deckEnergy: [],
+        // array to display pokemon seperatly
         deckPokemon: [],
+        // array to display traienrs spereatly
         deckTrainer: [],
+        //  active img src  
         deckImage: "",
+        // loop for basic energy check
         cardEnergy: [
           "Fire Energy",
           "Figthing Energy",
@@ -146,28 +159,32 @@
         ],
       };
     },
+    //called to start loading until the async is finished
     beforeCreate() {
       store.dispatch("fetchIsLoading", true);
     },
+    // calls async funciton
     mounted() {
       this.$store.getters.Get_All_Pokemon;
     },
     methods: {
       loadMore() {
+        //Function to increase the number of cards shown
         if (this.cardsLength > this.$store.getters.getCarddbLength) return;
         this.cardsLength = this.cardsLength + 8;
       },
       searchPokemon() {
-        console.log(this.searchedPokemon)
+        // setting data to constants because issues with passing multiple var to the payload
         const name = this.searchedPokemon.name
         const format =this.searchedPokemon.format 
         const color =this.searchedPokemon.color 
         const typ =this.searchedPokemon.typ
+        //calling search function on main store and passing in search and filter varibles
         return store.dispatch("fetchSearchPokemon", {name, format , color , typ});
       },
+      //this function removes card from all arrays when clicked on in the deck container section
       removeCardFromDeck(card) {
         const index = this.deck.cards.indexOf(card);
-        console.log(this.deck.cards);
         if (index > -1) {
           this.deck.cards.splice(index, 1);
         }
@@ -189,15 +206,17 @@
             this.deckEnergy.splice(pokeE, 1);
           }
         }
+        //set the deck image back to nothing. use case if you have no more cards in the deck
         this.deckImage = "";
       },
+      //adds cards to arrays
       addCard(card) {
-        //add checks for building deck here
-        console.log(card);
+        //setting deck limit
         if (this.deck.cards.length == 60) {
           alert("Max Card limit for deck");
           return;
         }
+        //this for loop is for basic energies. Since you can have infinite amount
         for (let index = 0; index < this.cardEnergy.length; index++) {
           if (card.name == this.cardEnergy[index]) {
             this.deck.cards.push(card);
@@ -205,11 +224,14 @@
             return;
           }
         }
+        //function call to check if the card has only 4 copies in the deck
         this.checkForCardDup(card);
       },
+      //function for the img src in deck contain to change card image on hover
       deckImageChange(card) {
         this.deckImage = card.images.small;
       },
+      //function to loop through deck and check for total amount of cards by name
       checkForCardDup(card) {
         let cardName = [];
         for (let index = 0; index < this.deck.cards.length; index++) {
@@ -235,18 +257,23 @@
       },
     },
     computed: {
+      //function to load the currently filled array of cards from the store
       cardsLoaded() {
         if (this.$store.getters.getIsLoading) return;
         return this.$store.getters.getAllCards.slice(0, this.cardsLength);
       },
+      // computed function for the img src to change img on hover. loacted in the deckContain
       returnDeckImage() {
         return this.deckImage;
       },
+      //saves deck to firebase
       saveDeck() {
-        //pass in this.deck and the uid that is stored in the store as the document
+        //checks if deck is named.
+        // maybe needs another check for blank spaces
         if ( this.deckname == "") {
           alert("need to name deck");
         }
+        //check if deck has 60 cards and its named
         if (this.deck.cards.length === 60 && this.deckname != "") {
           updateUserDoc(this.$store.getters.getUserData.data.uid, this.deck);
           alert("saved deck");
@@ -255,6 +282,7 @@
           alert("deck not completed");
         }
       },
+      //clears all arrays and deck name
       clearDecks() {
         this.deck.cards = [];
         this.deck.deckName = '';
@@ -262,11 +290,6 @@
         this.deckTrainer = [];
         this.deckPokemon = [];
         alert("cleared deck");
-      },
-    },
-    watch: {
-      deckImage() {
-        return this.deckImage;
       },
     },
   };
