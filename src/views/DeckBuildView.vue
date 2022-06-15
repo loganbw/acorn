@@ -5,8 +5,9 @@
     v-model:active="this.$store.getters.getIsLoading"
     :can-cancel="false"
   ></loading>
-  <div class="bg"></div>
+  
   <div class="contain">
+    <div class="bg"></div>
     <div class="grass1Div">
       <img class="grass1" src="../assets/safari.svg" />
     </div>
@@ -445,6 +446,7 @@
     top: 0;
     z-index: -1;
     width: 150%;
+    background-repeat: no-repeat;
   }
   .dexDiv {
     margin-bottom: -33%;
