@@ -446,7 +446,7 @@
     top: 0;
     z-index: -1;
     width: 150%;
-    background-repeat: no-repeat;
+    background-repeat: repeat-x;
   }
   .dexDiv {
     margin-bottom: -33%;
