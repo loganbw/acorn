@@ -46,7 +46,7 @@
           </div>
         </li>
       </ul>
-      <div v-if="cardsLength > 16">
+      <div v-if="cardsLength > 15">
         <span @click="loadMore" class="loadMore">Load More</span>
       </div>
     </div>
