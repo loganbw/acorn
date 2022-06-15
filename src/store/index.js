@@ -21,7 +21,6 @@ const store = createStore({
   mutations: {
     Set_Login_Value(state, value) {
       state.user.loggedIn = value;
-      console.log(state);
     },
     Set_User_Data(state, data) {
       state.user.data = data;
@@ -34,10 +33,6 @@ const store = createStore({
     },
 
     Set_Searched_Pokemon(state, value) {
-      console.log("payload " + value.name);
-      console.log("payload " + value.typ);
-      console.log("payload " + value.color);
-      console.log("payload " + value.format);
       state.cards = [];
       state.isLoading = true;
       let vName = "";
@@ -54,12 +49,7 @@ const store = createStore({
         vFormat = " legalities.unlimited:legal ";
       if (value.typ != "") vTyp = " supertypes:" + value.typ;
       if (value.color != "") vColor = " types:" + value.color;
-      //default
-      console.log("q:" +vName + vColor + vTyp + vFormat  );
-
       pokemon.card.where({ q: vName + vFormat + vColor + vTyp  }).then((card) => {
-        console.log(card);
-        console.log(card.data);
         state.cards.push(card.data);
         state.isLoading = false;
       });
@@ -78,7 +68,6 @@ const store = createStore({
 
   actions: {
     fetchUser({ commit }, user) {
-      console.log("fetchUser " + user);
       commit("Set_Login_Value", user !== null);
       if (user) {
         commit("Set_User_Data", { email: user.email, uid: user.uid });

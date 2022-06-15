@@ -20,7 +20,9 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin: 1%;
+    margin: 1% 0% 1% 0%;
+    background-color: #343435;
+    
   }
   .rightContain {
     display: flex;

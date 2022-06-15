@@ -5,23 +5,31 @@
     v-model:active="this.$store.getters.getIsLoading"
     :can-cancel="false"
   ></loading>
+  <div class="bg"></div>
   <div class="contain">
+    <div class="grass1Div">
+      <img class="grass1" src="../assets/safari.svg" />
+    </div>
     <div class="searchContain">
-      <form @submit.prevent="searchPokemon">
-        <input v-model="searchedPokemon.name" placeholder="search pokemon" />
-        <select v-model="searchedPokemon.format" name="format" id="formats">
-          <option value="" disabled selected>filter by format</option>
-            <option v-for="format in cardFormats" :value="format">{{format}}</option>
-        </select>
-         <select v-model="searchedPokemon.color" name="color" id="colors">
-           <option value="" disabled selected>filter by color</option>
-            <option v-for="color  in cardColor" :value="color">{{color}}</option>
-        </select>
-        <select v-model="searchedPokemon.typ" name="typ" id="typs">
-          <option value="" disabled selected>filter by type</option>
-            <option v-for="typ  in cardType " :value="typ">{{typ}}</option>
-        </select>
-        <button type="submit">search</button>
+      <form class="searchForm" @submit.prevent="searchPokemon">
+        <div class="searchSubmits">
+          <input class="searchInput" v-model="searchedPokemon.name" placeholder="search pokemon" />
+          <button type="submit">search</button>
+        </div>
+        <div>
+          <select v-model="searchedPokemon.format" name="format" id="formats">
+            <option value="" disabled selected>filter by format</option>
+            <option v-for="format in cardFormats" :value="format">{{ format }}</option>
+          </select>
+          <select v-model="searchedPokemon.color" name="color" id="colors">
+            <option value="" disabled selected>filter by color</option>
+            <option v-for="color in cardColor" :value="color">{{ color }}</option>
+          </select>
+          <select v-model="searchedPokemon.typ" name="typ" id="typs">
+            <option value="" disabled selected>filter by type</option>
+            <option v-for="typ in cardType" :value="typ">{{ typ }}</option>
+          </select>
+        </div>
       </form>
     </div>
     <div class="cardContain">
@@ -38,65 +46,65 @@
           </div>
         </li>
       </ul>
-      <div v-if="cardslength > 16">
+      <div v-if="cardsLength > 15">
         <span @click="loadMore" class="loadMore">Load More</span>
       </div>
     </div>
+    <div class="dexDiv">
+      <img class="dexImg" src="../assets/Frame.svg" />
+    </div>
     <div class="deckContain">
-      <div class="deckAndCards">
-        <div class="deckImg">
-          <div class="deckName">
-            
-              <label></label>
-              <input v-model="deck.deckName" placeholder="name deck" />
-          
-          </div>
-          <img :src="returnDeckImage" />
-          <div class="deckButtons">
-            <button @click="saveDeck">save</button>
-            <button @click="clearDecks">clear</button>
-          </div>
+      <div class="deckImg">
+        <div class="deckName">
+          <label></label>
+          <input v-model="deck.deckName" placeholder="name deck" />
         </div>
-        <div class="deckCards">
-          <div>
-            <span>Pokemon | {{ deckPokemon.length }}</span>
-            <ul class="pokemon">
-              <li
-                v-for="(card, index) in deckPokemon"
-                @mouseover="deckImageChange(card)"
-                @click="removeCardFromDeck(card)"
-                :key="index"
-              >
-                {{ card.name }}
-              </li>
-            </ul>
-          </div>
-          <div>
-            <span>Trainer | {{ deckTrainer.length }}</span>
-            <ul class="trainer">
-              <li
-                v-for="(card, index) in deckTrainer"
-                @mouseover="deckImageChange(card)"
-                @click="removeCardFromDeck(card)"
-                :key="index"
-              >
-                {{ card.name }}
-              </li>
-            </ul>
-          </div>
-          <div>
-            <span>Energy | {{ deckEnergy.length }}</span>
-            <ul class="energy">
-              <li
-                v-for="(card, index) in deckEnergy"
-                @mouseover="deckImageChange(card)"
-                @click="removeCardFromDeck(card)"
-                :key="index"
-              >
-                {{ card.name }}
-              </li>
-            </ul>
-          </div>
+        <img class="searchImg" :src="returnDeckImage" />
+        <div class="deckButtons">
+          <button @click="saveDeck">save</button>
+          <button @click="clearDecks">clear</button>
+        </div>
+      </div>
+      <div class="deckCards">
+        <div class="deckCardDiv">
+          <span class="cardSupertype">Pokemon: {{ deckPokemon.length }}</span>
+          <ul class="pokemon ulCards">
+            <li
+              v-for="(card, index) in deckPokemon"
+              @mouseover="deckImageChange(card)"
+              @click="removeCardFromDeck(card)"
+              :key="index"
+            >
+              {{ card.name }}
+            </li>
+          </ul>
+        </div>
+        <div class="deckCardDiv">
+          <span class="cardSupertype">Trainer: {{ deckTrainer.length }}</span>
+          <ul class="trainer ulCards">
+            <li
+              v-for="(card, index) in deckTrainer"
+              @mouseover="deckImageChange(card)"
+              @click="removeCardFromDeck(card)"
+              :key="index"
+            >
+              {{ card.name }}
+            </li>
+          </ul>
+        </div>
+        <div class="deckCardDiv">
+          <span class="cardSupertype">Energy: </span>
+          <span>{{ deckEnergy.length }}</span>
+          <ul class="energy ulCards">
+            <li
+              v-for="(card, index) in deckEnergy"
+              @mouseover="deckImageChange(card)"
+              @click="removeCardFromDeck(card)"
+              :key="index"
+            >
+              {{ card.name }}
+            </li>
+          </ul>
         </div>
       </div>
     </div>
@@ -130,20 +138,20 @@
           "Metal",
           "Grass",
         ],
-        searchedPokemon: { name: "", format: "", typ: "", color:"" },
+        searchedPokemon: { name: "", format: "", typ: "", color: "" },
         /// ^
         ///////////////
 
         // object for deck
-        deck: { deckName: "",deckCreated: new Date(), cards: [] },
-        // array to display energies seperatly 
+        deck: { deckName: "", deckCreated: new Date(), cards: [] },
+        // array to display energies seperatly
         deckEnergy: [],
         // array to display pokemon seperatly
         deckPokemon: [],
         // array to display traienrs spereatly
         deckTrainer: [],
-        //  active img src  
-        deckImage: "",
+        //  active img src
+        deckImage: "/src/assets/backPCard.svg",
         // loop for basic energy check
         cardEnergy: [
           "Fire Energy",
@@ -175,12 +183,12 @@
       },
       searchPokemon() {
         // setting data to constants because issues with passing multiple var to the payload
-        const name = this.searchedPokemon.name
-        const format =this.searchedPokemon.format 
-        const color =this.searchedPokemon.color 
-        const typ =this.searchedPokemon.typ
+        const name = this.searchedPokemon.name;
+        const format = this.searchedPokemon.format;
+        const color = this.searchedPokemon.color;
+        const typ = this.searchedPokemon.typ;
         //calling search function on main store and passing in search and filter varibles
-        return store.dispatch("fetchSearchPokemon", {name, format , color , typ});
+        return store.dispatch("fetchSearchPokemon", { name, format, color, typ });
       },
       //this function removes card from all arrays when clicked on in the deck container section
       removeCardFromDeck(card) {
@@ -207,7 +215,7 @@
           }
         }
         //set the deck image back to nothing. use case if you have no more cards in the deck
-        this.deckImage = "";
+        this.deckImage = "/src/assets/backPCard.svg";
       },
       //adds cards to arrays
       addCard(card) {
@@ -270,7 +278,7 @@
       saveDeck() {
         //checks if deck is named.
         // maybe needs another check for blank spaces
-        if ( this.deckname == "") {
+        if (this.deckname == "") {
           alert("need to name deck");
         }
         //check if deck has 60 cards and its named
@@ -278,14 +286,13 @@
           updateUserDoc(this.$store.getters.getUserData.data.uid, this.deck);
           alert("saved deck");
         } else {
-          console.log(this.deck.cards.length);
           alert("deck not completed");
         }
       },
       //clears all arrays and deck name
       clearDecks() {
         this.deck.cards = [];
-        this.deck.deckName = '';
+        this.deck.deckName = "";
         this.deckEnergy = [];
         this.deckTrainer = [];
         this.deckPokemon = [];
@@ -295,6 +302,23 @@
   };
 </script>
 <style scoped>
+  .grass1 {
+    width: 40%;
+    right: -29%;
+    z-index: -1;
+    top: -6%;
+  }
+  .grass2 {
+    width: 13%;
+    right: -42%;
+    z-index: -1;
+    top: -6%;
+    transform: scale(-1, 1);
+  }
+  .grass1Div {
+    margin-bottom: -59px;
+  }
+
   .load {
     position: relative;
     /* margin-top: -10%; */
@@ -347,24 +371,51 @@
     display: flex;
     justify-content: center;
   }
+  .searchForm {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .searchSubmits {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .searchInput {
+    width: 82%;
+  }
+  .searchImg {
+    width: 80%;
+    margin: 2%;
+  }
   .deckContain {
     display: flex;
-    justify-content: center;
-    margin-top: 2%;
-    width: 80%;
+    justify-content: space-between;
+    margin: 2% 0% 2% 0%;
+    width: 51%;
     padding: 2%;
+    border-radius: 1%;
   }
   .deckImg {
     display: flex;
     flex-direction: column;
     align-items: center;
+    margin-left: 17px;
   }
   .deckCards {
+    margin-right: 1%;
     display: flex;
     text-align: right;
+    margin-left: 0%;
+    width:46%
   }
   .deckAndCards {
     display: flex;
+  }
+  .ulCards{
+    padding:0;
+    height: 20%;
   }
   li {
     list-style: none;
@@ -377,7 +428,41 @@
     flex-direction: column;
     align-items: center;
   }
-  select{
-    color:black !important;
+  select {
+    color: black !important;
+  }
+  button {
+    color: black;
+  }
+  .bg {
+    background-image: url("../assets/deckBackground.svg");
+    background-size: contain;
+    bottom: 0;
+    left: -50%;
+    opacity: 0.5;
+    position: absolute;
+    right: -50%;
+    top: 0;
+    z-index: -1;
+    width: 150%;
+  }
+  .dexDiv {
+    margin-bottom: -33%;
+    /* height: 104px; */
+    right: 311px;
+  }
+  .dexImg {
+    width: 565%;
+  }
+  .deckCardDiv{
+    width:40%;
+    margin:1%;
+    text-align: center;
+    height: 120%;
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+  .cardSupertype{
+    font-weight: bold;
   }
 </style>
