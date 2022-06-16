@@ -1,13 +1,15 @@
 <template>
+ 
   <div class="header">
-    <h2>PokeVue</h2>
-
+    <div class="title">
+      <h2>PokéVue</h2>
+    </div>     
     <div class="rightContain">
-      <div>
-        <span>Play</span>
-        <span>Deck Builder</span>
+      <div classs="divRoute">
+        <router-link :to="{ name: 'Play' }">Play</router-link>
+        <router-link :to="{ name: 'Deck' }">Deck Builder</router-link>
+        <router-link :to="{ name: 'Account' }">My Account</router-link>
       </div>
-      <img src="../../assets/Pokedex_Icon_Closed.svg" />
     </div>
   </div>
 </template>
@@ -20,13 +22,32 @@
     flex-direction: row;
     align-items: center;
     justify-content: space-between;
-    margin: 1% 0% 1% 0%;
-    background-color: #343435;
-    
+    margin: 0% 0% 1% 0%;
+    background-image: linear-gradient(-60deg, rgb(39 39 39) 62%, #ededed 62%);
+    z-index: 2;
+  }
+  .bgStripe{
+   position: absolute;
+    background-image: linear-gradient(49deg, rgb(240 231 231) 62%, #fec10b 62%);
+    z-index: 2;
+    height: 101%;
+    width: 40%;
+    left: 12%;
+  }
+  .bgStripe2{
+   position: absolute;
+    background-image: linear-gradient(49deg, rgb(240 231 231) 62%, #fec10b 62%);
+    z-index: 2;
+    height: 101%;
+    width: 40%;
+    left: 12%;
   }
   .rightContain {
     display: flex;
     align-items: center;
+    margin-right: 2%;
+    width: 20%;
+    text-align: center;
   }
   img {
     transform: rotate(90deg);
@@ -37,5 +58,23 @@
     content: url("../../assets/Pokedex_Icon_Open.svg");
     height: 100px;
     width: 100px;
+  }
+  a {
+    margin: 2%;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .title {
+    margin-left: 1%;
+    text-align: center;
+    padding-bottom: 1%;
+    color: #fec10b;
+    text-shadow: -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;
+  }
+  .routeNav {
+    width: 85% !important;
+  }
+  .divRoute{
+    width:85%;
   }
 </style>

@@ -11,27 +11,34 @@ const store = createStore({
       isLoading: false,
       isEmailTrue: false,
       searchedPokemon: [],
-      deckedPokemon: [],
+      //array for firebae to populate the current deck being used
+      deckPokemon: [],
       carddbLength: 0,
+      //array for firebae to populate all  decks
       decks: [],
+      //cards in currently active deck
       cards: [],
     };
   },
   modules: {},
   mutations: {
+    //setting value from firebase to check if user is logged in
     Set_Login_Value(state, value) {
       state.user.loggedIn = value;
     },
+    //ets the rest of the user data form firebase
     Set_User_Data(state, data) {
       state.user.data = data;
     },
+    //loading screen flag /if true loading screen should be active if false it should not show screen
     Set_isLoading(state, flag) {
       state.isLoading = flag;
     },
+    // This Check is to make sure the email being used is true 
     Set_isEmailTrue(state, flag) {
       state.isEmailTrue = flag;
     },
-
+    //calls pokemon api and sets the cards array to the searched pokemon
     Set_Searched_Pokemon(state, value) {
       state.cards = [];
       state.isLoading = true;
@@ -40,7 +47,8 @@ const store = createStore({
       let vTyp = "";
       let vColor = "";
       //if check for format and name search
-      if (value.name != "") vName = " name:" + value.name;
+      if (value.name != "") vName = " name:" + '"' + value.name + '"' ;
+      //if check for setting which format
       if (value.format == "standard")
         vFormat = " legalities.standard:legal ";
       if (value.format == "expandand")
@@ -49,20 +57,13 @@ const store = createStore({
         vFormat = " legalities.unlimited:legal ";
       if (value.typ != "") vTyp = " supertypes:" + value.typ;
       if (value.color != "") vColor = " types:" + value.color;
-      pokemon.card.where({ q: vName + vFormat + vColor + vTyp  }).then((card) => {
+      //api call
+      pokemon.card.where({ q: vName + vFormat + vColor + vTyp,  orderBy: 'name'}).then((card) => {
         state.cards.push(card.data);
         state.isLoading = false;
-      });
-    },
-    Set_CarddbLength(state) {
-      pokemon.card
-        .all()
-        .then((cards) => {
-          state.carddbLength = cards.length;
-        })
-        .catch((err) => {
-          alert(err);
-        });
+      }).catch((err =>{
+        console.log(err)
+      }));
     },
   },
 
@@ -94,9 +95,11 @@ const store = createStore({
     getUserData(state) {
       return state.user;
     },
+    //second api call to populate first page of cards. 
+    //set to one page instead of all due to loading issues
     Get_All_Pokemon(state) {
       state.cards = [];
-      pokemon.card.where({ page: 1 }).then((cards) => {
+      pokemon.card.where({ page: 1 , OrderBy: 'name'}).then((cards) => {
         state.cards.push(cards.data);
         state.isLoading = false;
       });

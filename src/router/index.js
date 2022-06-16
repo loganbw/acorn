@@ -2,7 +2,9 @@ import { createRouter, createWebHistory } from "vue-router";
 import HomeView from "../views/HomeView.vue";
 import SignView from "../views/SignView.vue";
 import PlayView from "../views/PlayView.vue";
+import AccountView from "../views/AccountView.vue";
 import DeckBuildView from "../views/DeckBuildView.vue";
+import PageNotFoundView from "../views/PageNotFoundView.vue"
 import store from "../store/index";
 
 const router = createRouter({
@@ -28,6 +30,20 @@ const router = createRouter({
       name: "Deck",
       component: DeckBuildView,
     },
+    {
+      path: "/account",
+      name: "Account",
+      component: AccountView,
+    },
+    {
+      // path: "*",
+      path: "/:catchAll(.*)",
+      name: "NotFound",
+      component: PageNotFoundView,
+      meta: {
+        requiresAuth: false
+      }
+    }
     // {
     //   path: "/about",
     //   name: "about",

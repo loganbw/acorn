@@ -6,10 +6,9 @@ import { moduleExpression } from "@babel/types";
 import { storeKey } from "vuex";
 import router from "./router";
 import store from "../src/store/index"
-// Follow this pattern to import other Firebase services
-// import { } from 'firebase/<service>';
+import apikey from "/api-keys.json"
 const firebaseConfig = {
-  apiKey: "AIzaSyBCa_druQ0yexJrH8fkxhvjfZt3tt4qu2M",
+  apiKey: apikey.firebase,
   authDomain: "acorn-3ccb7.firebaseapp.com",
   projectId: "acorn-3ccb7",
   storageBucket: "acorn-3ccb7.appspot.com",
@@ -17,11 +16,12 @@ const firebaseConfig = {
   appId: "1:844390403904:web:329f6d908395ba6f04b4a5",
   measurementId: "G-7EXZPVR47D",
 };
-
+////
+//  WE export these functions for them to be called anywhere
+///
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 const auth = getAuth();
-//const arrayUnion = firebase.firestore.FieldValue.arrayUnion;
 
 // Get a list of users from your database
 async function getUsers(db) {
@@ -38,8 +38,6 @@ export async function signInUser(email, password) {
       // Signed in
       const user = userCredential.user;
       router.push({ name: "Play" });
-
-      // ...
     })
     .catch((error) => {
       const errorCode = error.code;

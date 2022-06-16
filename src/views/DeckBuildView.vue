@@ -18,15 +18,15 @@
           <button type="submit">search</button>
         </div>
         <div>
-          <select v-model="searchedPokemon.format" name="format" id="formats">
+          <select class="selectSearch" v-model="searchedPokemon.format" name="format" id="formats">
             <option value="" disabled selected>filter by format</option>
             <option v-for="format in cardFormats" :value="format">{{ format }}</option>
           </select>
-          <select v-model="searchedPokemon.color" name="color" id="colors">
+          <select class="selectSearch" v-model="searchedPokemon.color" name="color" id="colors">
             <option value="" disabled selected>filter by color</option>
             <option v-for="color in cardColor" :value="color">{{ color }}</option>
           </select>
-          <select v-model="searchedPokemon.typ" name="typ" id="typs">
+          <select class="selectSearch" v-model="searchedPokemon.typ" name="typ" id="typs">
             <option value="" disabled selected>filter by type</option>
             <option v-for="typ in cardType" :value="typ">{{ typ }}</option>
           </select>
@@ -47,14 +47,14 @@
           </div>
         </li>
       </ul>
-      <div v-if="cardsLength > 15">
+      <div class="loadMoreDiv" v-if="cardsLength > 15">
         <span @click="loadMore" class="loadMore">Load More</span>
       </div>
     </div>
-    <div class="dexDiv">
+    <div v-if="!this.$store.getters.getIsLoading"  class="dexDiv">
       <img class="dexImg" src="../assets/Frame.svg" />
     </div>
-    <div class="deckContain">
+    <div v-if="!this.$store.getters.getIsLoading"  class="deckContain">
       <div class="deckImg">
         <div class="deckName">
           <label></label>
@@ -221,6 +221,7 @@
       //adds cards to arrays
       addCard(card) {
         //setting deck limit
+        console.log(card)
         if (this.deck.cards.length == 60) {
           alert("Max Card limit for deck");
           return;
@@ -298,7 +299,8 @@
         this.deckTrainer = [];
         this.deckPokemon = [];
         alert("cleared deck");
-      },
+     
+     },
     },
   };
 </script>
@@ -364,9 +366,14 @@
   }
   .loadMore:hover {
     cursor: pointer;
+    color: #ffffff;
   }
   .loadMore:active {
-    color: rgb(158, 156, 156);
+    color: #c6c5c5;
+  }
+  .loadMore{
+    color: #ededed;
+    font-weight: bold;
   }
   .searchContain {
     display: flex;
@@ -436,17 +443,20 @@
     color: black;
   }
   .bg {
-    background-image: url("../assets/deckBackground.svg");
-    background-size: contain;
+    background-image: url("../assets/deckBackgroundview.svg");
+    background-size: cover;
     bottom: 0;
-    left: -50%;
+    /* left: -50%; */
+    width: 100%;
     opacity: 0.5;
-    position: absolute;
-    right: -50%;
-    top: 0;
-    z-index: -1;
-    width: 150%;
-    background-repeat: repeat-x;
+    position: fixed;
+    /* right: -50%; */
+    /* top: -57%; */
+    /* z-index: -1; */
+    height: 100%;
+    /* background-repeat: repeat-x; */
+    background-position: top;
+  
   }
   .dexDiv {
     margin-bottom: -33%;
@@ -466,5 +476,8 @@
   }
   .cardSupertype{
     font-weight: bold;
+  }
+  .loadMoreDiv{
+    margin-bottom:2%
   }
 </style>
