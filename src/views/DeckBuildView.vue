@@ -19,15 +19,15 @@
         </div>
         <div>
           <select class="selectSearch" v-model="searchedPokemon.format" name="format" id="formats">
-            <option value="" disabled selected>filter by format</option>
+            <option value=""  selected>filter by format</option>
             <option v-for="format in cardFormats" :value="format">{{ format }}</option>
           </select>
           <select class="selectSearch" v-model="searchedPokemon.color" name="color" id="colors">
-            <option value="" disabled selected>filter by color</option>
+            <option value=""  selected>filter by color</option>
             <option v-for="color in cardColor" :value="color">{{ color }}</option>
           </select>
           <select class="selectSearch" v-model="searchedPokemon.typ" name="typ" id="typs">
-            <option value="" disabled selected>filter by type</option>
+            <option value=""  selected>filter by type</option>
             <option v-for="typ in cardType" :value="typ">{{ typ }}</option>
           </select>
         </div>
@@ -221,7 +221,6 @@
       //adds cards to arrays
       addCard(card) {
         //setting deck limit
-        console.log(card)
         if (this.deck.cards.length == 60) {
           alert("Max Card limit for deck");
           return;

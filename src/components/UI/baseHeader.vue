@@ -5,11 +5,11 @@
       <h2>PokéVue</h2>
     </div>     
     <div class="rightContain">
-      <div classs="divRoute">
+      
         <router-link :to="{ name: 'Play' }">Play</router-link>
         <router-link :to="{ name: 'Deck' }">Deck Builder</router-link>
-        <router-link :to="{ name: 'Account' }">My Account</router-link>
-      </div>
+        <router-link :to="{ name: 'Account' }">Account</router-link>
+    
     </div>
   </div>
 </template>
@@ -17,6 +17,9 @@
   export default {};
 </script>
 <style scoped>
+   .divRoute{
+    width:85%;
+  }
   .header {
     display: flex;
     flex-direction: row;
@@ -74,7 +77,5 @@
   .routeNav {
     width: 85% !important;
   }
-  .divRoute{
-    width:85%;
-  }
+ 
 </style>
