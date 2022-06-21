@@ -62,7 +62,7 @@
         </div>
         <img class="searchImg" :src="returnDeckImage" />
         <div class="deckButtons">
-          <button @click="saveDeck">save</button>
+          <button @click="saveDeck && saveDeckMethod">save</button>
           <button @click="clearDecks">clear</button>
         </div>
       </div>
@@ -94,8 +94,7 @@
           </ul>
         </div>
         <div class="deckCardDiv">
-          <span class="cardSupertype">Energy: </span>
-          <span>{{ deckEnergy.length }}</span>
+          <span class="cardSupertype">Energy: {{ deckEnergy.length }}</span>
           <ul class="energy ulCards">
             <li
               v-for="(card, index) in deckEnergy"
@@ -177,6 +176,9 @@
       this.$store.getters.Get_All_Pokemon;
     },
     methods: {
+      saveDeckMethod(){
+        store.dispatch("fetchIsLoading", true)
+      },
       loadMore() {
         //Function to increase the number of cards shown
         if (this.cardsLength > this.$store.getters.getCarddbLength) return;
@@ -279,11 +281,11 @@
       saveDeck() {
         //checks if deck is named.
         // maybe needs another check for blank spaces
-        if (this.deckname == "") {
+        if (this.deck.deckname == "") {
           alert("need to name deck");
         }
         //check if deck has 60 cards and its named
-        if (this.deck.cards.length === 60 && this.deckname != "") {
+        if (this.deck.cards.length === 60 && this.deck.deckname != "") {
           updateUserDoc(this.$store.getters.getUserData.data.uid, this.deck);
           alert("saved deck");
         } else {
@@ -469,7 +471,7 @@
     width:40%;
     margin:1%;
     text-align: center;
-    height: 120%;
+    height: 299px;
     overflow-y: scroll;
     overflow-x: hidden;
   }

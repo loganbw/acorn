@@ -1,6 +1,7 @@
 import { createStore } from "vuex";
 import pokemon from "pokemontcgsdk";
 import apiKiey from "../../api-keys.json";
+import { getAllUsersDecks } from "..";
 // Create a new store instance.
 const pokemonAPiKey = apiKiey.pokemon;
 pokemon.configure({ apiKey: pokemonAPiKey });
@@ -15,7 +16,7 @@ const store = createStore({
       deckPokemon: [],
       carddbLength: 0,
       //array for firebae to populate all  decks
-      decks: [],
+      decks: {},
       //cards in currently active deck
       cards: [],
     };
@@ -65,6 +66,10 @@ const store = createStore({
         console.log(err)
       }));
     },
+    Set_User_Decks(state,value){
+      state.decks = value
+      console.log(value + "state decks")
+    }
   },
 
   actions: {
@@ -90,6 +95,10 @@ const store = createStore({
         typ: payload.typ,
       });
     },
+    fetchUserDecks(context,payload){
+      console.log(payload)
+      context.commit("Set_User_Decks",payload)
+    }
   },
   getters: {
     getUserData(state) {
@@ -119,6 +128,9 @@ const store = createStore({
     getCarddbLength(state) {
       return state.cards[0].length;
     },
+    getAllUsersDecks(state){
+      return state.decks;
+    }
   },
 });
 export default store;

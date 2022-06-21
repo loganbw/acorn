@@ -56,6 +56,7 @@ const router = createRouter({
 });
 router.beforeEach(async (to, from) => {
   store.dispatch("fetchIsLoading", true);
+
   if (
     // make sure the user is authenticated
     store.getters.getUserData.isLoggedIn &&
