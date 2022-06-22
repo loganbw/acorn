@@ -19,15 +19,15 @@
         </div>
         <div>
           <select class="selectSearch" v-model="searchedPokemon.format" name="format" id="formats">
-            <option value="" disabled selected>filter by format</option>
+            <option value=""  selected>filter by format</option>
             <option v-for="format in cardFormats" :value="format">{{ format }}</option>
           </select>
           <select class="selectSearch" v-model="searchedPokemon.color" name="color" id="colors">
-            <option value="" disabled selected>filter by color</option>
+            <option value=""  selected>filter by color</option>
             <option v-for="color in cardColor" :value="color">{{ color }}</option>
           </select>
           <select class="selectSearch" v-model="searchedPokemon.typ" name="typ" id="typs">
-            <option value="" disabled selected>filter by type</option>
+            <option value=""  selected>filter by type</option>
             <option v-for="typ in cardType" :value="typ">{{ typ }}</option>
           </select>
         </div>
@@ -62,7 +62,7 @@
         </div>
         <img class="searchImg" :src="returnDeckImage" />
         <div class="deckButtons">
-          <button @click="saveDeck">save</button>
+          <button @click="saveDeck && saveDeckMethod">save</button>
           <button @click="clearDecks">clear</button>
         </div>
       </div>
@@ -94,8 +94,7 @@
           </ul>
         </div>
         <div class="deckCardDiv">
-          <span class="cardSupertype">Energy: </span>
-          <span>{{ deckEnergy.length }}</span>
+          <span class="cardSupertype">Energy: {{ deckEnergy.length }}</span>
           <ul class="energy ulCards">
             <li
               v-for="(card, index) in deckEnergy"
@@ -177,6 +176,9 @@
       this.$store.getters.Get_All_Pokemon;
     },
     methods: {
+      saveDeckMethod(){
+        store.dispatch("fetchIsLoading", true)
+      },
       loadMore() {
         //Function to increase the number of cards shown
         if (this.cardsLength > this.$store.getters.getCarddbLength) return;
@@ -221,7 +223,6 @@
       //adds cards to arrays
       addCard(card) {
         //setting deck limit
-        console.log(card)
         if (this.deck.cards.length == 60) {
           alert("Max Card limit for deck");
           return;
@@ -280,11 +281,11 @@
       saveDeck() {
         //checks if deck is named.
         // maybe needs another check for blank spaces
-        if (this.deckname == "") {
+        if (this.deck.deckname == "") {
           alert("need to name deck");
         }
         //check if deck has 60 cards and its named
-        if (this.deck.cards.length === 60 && this.deckname != "") {
+        if (this.deck.cards.length === 60 && this.deck.deckname != "") {
           updateUserDoc(this.$store.getters.getUserData.data.uid, this.deck);
           alert("saved deck");
         } else {
@@ -470,7 +471,7 @@
     width:40%;
     margin:1%;
     text-align: center;
-    height: 120%;
+    height: 299px;
     overflow-y: scroll;
     overflow-x: hidden;
   }
