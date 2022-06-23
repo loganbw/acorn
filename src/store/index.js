@@ -8,7 +8,7 @@ pokemon.configure({ apiKey: pokemonAPiKey });
 const store = createStore({
   state() {
     return {
-      user: { loggedIn: false, data: null },
+      user: { loggedIn: false, data: null, avatar: null },
       isLoading: false,
       isEmailTrue: false,
       searchedPokemon: [],
@@ -27,15 +27,21 @@ const store = createStore({
     Set_Login_Value(state, value) {
       state.user.loggedIn = value;
     },
+    Set_Avatar_Value(state, value){
+      console.log(value)
+      state.user.avatar = value
+      console.log(state.user)
+    },
     //ets the rest of the user data form firebase
     Set_User_Data(state, data) {
       state.user.data = data;
+      console.log(state.user.data)
     },
     //loading screen flag /if true loading screen should be active if false it should not show screen
     Set_isLoading(state, flag) {
       state.isLoading = flag;
     },
-    // This Check is to make sure the email being used is true 
+    // This Check is to make sure the email being used is true
     Set_isEmailTrue(state, flag) {
       state.isEmailTrue = flag;
     },
@@ -48,28 +54,27 @@ const store = createStore({
       let vTyp = "";
       let vColor = "";
       //if check for format and name search
-      if (value.name != "") vName = " name:" + '"' + value.name + '"' ;
+      if (value.name != "") vName = " name:" + '"' + value.name + '"';
       //if check for setting which format
-      if (value.format == "standard")
-        vFormat = " legalities.standard:legal ";
-      if (value.format == "expandand")
-        vFormat = " legalities.expanded:legal ";
-      if (value.format == "unlimited")
-        vFormat = " legalities.unlimited:legal ";
+      if (value.format == "standard") vFormat = " legalities.standard:legal ";
+      if (value.format == "expandand") vFormat = " legalities.expanded:legal ";
+      if (value.format == "unlimited") vFormat = " legalities.unlimited:legal ";
       if (value.typ != "") vTyp = " supertypes:" + value.typ;
       if (value.color != "") vColor = " types:" + value.color;
       //api call
-      pokemon.card.where({ q: vName + vFormat + vColor + vTyp,  orderBy: 'name'}).then((card) => {
-        state.cards.push(card.data);
-        state.isLoading = false;
-      }).catch((err =>{
-        console.log(err)
-      }));
+      pokemon.card
+        .where({ q: vName + vFormat + vColor + vTyp, orderBy: "name" })
+        .then((card) => {
+          state.cards.push(card.data);
+          state.isLoading = false;
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
-    Set_User_Decks(state,value){
-      state.decks = value
-      console.log(value + "state decks")
-    }
+    Set_User_Decks(state, value) {
+      state.decks = value;
+    },
   },
 
   actions: {
@@ -80,6 +85,9 @@ const store = createStore({
       } else {
         commit("Set_User_Data", null);
       }
+    },
+    fetchAvatar(context, payload){
+      context.commit("Set_Avatar_Value",payload)
     },
     fetchIsLoading(context, payload) {
       context.commit("Set_isLoading", payload);
@@ -95,20 +103,20 @@ const store = createStore({
         typ: payload.typ,
       });
     },
-    fetchUserDecks(context,payload){
-      console.log(payload)
-      context.commit("Set_User_Decks",payload)
-    }
+    fetchUserDecks(context, payload) {
+   
+      context.commit("Set_User_Decks", payload);
+    },
   },
   getters: {
     getUserData(state) {
       return state.user;
     },
-    //second api call to populate first page of cards. 
+    //second api call to populate first page of cards.
     //set to one page instead of all due to loading issues
     Get_All_Pokemon(state) {
       state.cards = [];
-      pokemon.card.where({ page: 1 , OrderBy: 'name'}).then((cards) => {
+      pokemon.card.where({ page: 1, OrderBy: "name" }).then((cards) => {
         state.cards.push(cards.data);
         state.isLoading = false;
       });
@@ -128,8 +136,11 @@ const store = createStore({
     getCarddbLength(state) {
       return state.cards[0].length;
     },
-    getAllUsersDecks(state){
+    getAllUsersDecks(state) {
       return state.decks;
+    },
+    getAvatar(state){
+      return state.user.avatar
     }
   },
 });

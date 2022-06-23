@@ -401,8 +401,8 @@
   .deckContain {
     display: flex;
     justify-content: space-between;
-    margin: 2% 0% 2% 0%;
-    width: 51%;
+    margin: -7% 0% 2% 0%;
+    width: 67%;
     padding: 2%;
     border-radius: 1%;
   }
