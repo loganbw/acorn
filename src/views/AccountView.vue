@@ -16,8 +16,18 @@
           </div>
         </div>
         <form @submit.prevent="changeUserName">
-          <input v-if="edit" type="text" placeholder="User Name" v-model="userName" name="uName" />
-          <div @click="changeToEdit" class="formEdits" v-else>
+          <input
+            v-if="edit"
+            type="text"
+            autofocus
+            @focusout="edit = false"
+            ref="input"
+            placeholder="User Name"
+            v-model="userName"
+            name="uName"
+          />
+          <div  class="formEdits" v-else>
+            <button @click="changeToEdit" id="uName" class="editButton"></button>
             <label for="uName"> {{ displayUser }}</label>
             <img class="editSvg" src="../assets/pencil.svg" />
           </div>
@@ -37,6 +47,10 @@
   </div>
 </template>
 <script>
+  /*
+  BUGS : 
+    - the v-if to display needs to be fixed
+  */
   import BaseHeader from "../components/UI/baseHeader.vue";
   import { getAllUsersDecks, deleteUserDeck, uploadImgFirebase, getAvatar } from "../index.js";
   import VueLoading from "vue-loading-overlay";
@@ -64,22 +78,25 @@
         this.$store.dispatch("fetchIsLoading", true);
         uploadImgFirebase(this.imgFile);
       },
+       changeToEdit() {
+        
+         console.log(this.$refs)
+        return (this.edit = !this.edit);
+      },
     },
 
     computed: {
       getAvatarImg() {
         return this.$store.getters.getAvatar;
       },
-      getUserName(){
+      getUserName() {
         //dispatch store value to set it to username
-      }
+      },
       getDecks() {
         return this.$store.getters.getAllUsersDecks;
         //getAllUsersDecks(this.$store.getters.getUserData.data.uid);
       },
-      changeToEdit() {
-        return (this.edit = !this.edit);
-      },
+     
       displayUser() {
         if (this.userName == "") return "User Name";
         else return this.userName;
@@ -149,7 +166,14 @@
     display: flex;
     justify-content: center;
   }
-  .load {
+  .editButton{
+    visibility: hidden;
+    position: absolute;
+    width: 80%;
+    height: 20px;
+    z-index: 2;
+  }
+.load {
     position: relative;
     /* margin-top: -10%; */
     display: flex;

@@ -113,7 +113,7 @@ async function setUserDoc(user) {
     uid: user.uid,
     email: user.email,
     userName: "",
-    avatar: "",
+    avatar: "Avatars/defaultAvatar.svg",
     decks: [],
   });
 }
@@ -166,7 +166,7 @@ export async function getAllUsersDecks(uid) {
 
 export async function uploadImgFirebase(file){
   //maybe a new naming convention
-  const name = new Date() + '-' + file.name
+  const name = new Date().toLocaleDateString() + '-' + file.name
   const imgRef = ref(storage, 'Avatars/'+ name)
   console.log(file)
   uploadBytes(imgRef, file).then((snapshot) => {
