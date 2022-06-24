@@ -1,6 +1,5 @@
 import { initializeApp } from "@firebase/app";
 
-
 import {
   getFirestore,
   collection,
@@ -17,15 +16,15 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   fetchSignInMethodsForEmail,
+  onAuthStateChanged,
   sendPasswordResetEmail,
+  updateProfile
 } from "firebase/auth";
 import router from "./router";
 import store from "../src/store/index";
 import apikey from "/api-keys.json";
-import { getStorage, ref, uploadBytes,getDownloadURL } from "firebase/storage";
+import { getStorage, ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { async } from "@firebase/util";
-
-
 
 const firebaseConfig = {
   apiKey: apikey.firebase,
@@ -44,6 +43,8 @@ const db = getFirestore(app);
 const auth = getAuth();
 const storage = getStorage();
 
+const userRoot = auth.currentUser;
+
 // Get a list of users from your database
 async function getUsers(db) {
   const usersCol = collection(db, "Users");
@@ -57,7 +58,10 @@ export async function signInUser(email, password) {
     .then((userCredential) => {
       // Signed in
       const user = userCredential.user;
+      console.log(user.uid);
       router.push({ name: "Play" });
+
+      //make anpther call to get user data from doc, then set avatar here
     })
     .catch((error) => {
       const errorCode = error.code;
@@ -66,43 +70,56 @@ export async function signInUser(email, password) {
       alert(errorMessage);
     });
     
+    console.log("user: " + userRoot)
   store.dispatch("isLoading", false);
 }
 //validates signed user
-auth.onAuthStateChanged((user) => {
+onAuthStateChanged(auth,(user) => {
+  console.log(user)
   store.dispatch("fetchUser", user);
   if (user == null) setUserDoc(user);
-  retrieveAvatar(user)
+  retrieveAvatar(user);
   store.dispatch("fetchIsLoading", false);
   getAllUsersDecks(user.uid);
 });
 
-async function retrieveAvatar(user){
-  console.log(user)
-  const ref = doc(db,"Users",user.uid)
+async function retrieveAvatar(user) {
+  console.log(user);
+  const ref = doc(db, "Users", user.uid);
   const docSnap = await getDoc(ref);
   if (docSnap.exists()) {
     console.log("Document data:", docSnap.data());
-    getAvatar(docSnap.data().avatar)
+    getAvatar(docSnap.data().avatar);
   } else {
     // doc.data() will be undefined in this case
     console.log("No such document!");
   }
 }
-
 // function to create users
+//need to set uname
 export async function createUser(email, password) {
   const uid = "";
-  createUserWithEmailAndPassword(auth, email, password)
+  await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
+      console.log(userCredential);
       const user = userCredential.user;
-      return user;
+      const imgRef = ref(storage, "Avatars/defaultAvatar.svg");
+       getDownloadURL(imgRef).then((url) => {
+        updateProfile(user,{
+          photoURL: url
+        })
+      });
+      
+      console.log(user)
       // ...
     })
     .catch((error) => {
       const errorCode = error.code;
       const errorMessage = error.message;
+      console.log(error)
+      console.log(errorCode)
+      console.log(errorMessage);
       // ..
     });
   store.dispatch("fetchIsLoading", false);
@@ -136,11 +153,10 @@ export async function deleteUserDeck(uid, deck) {
   await updateDoc(doc(db, "Users", uid), {
     decks: arrayRemove(deck),
   });
-  getAllUsersDecks(uid)
+  getAllUsersDecks(uid);
   store.dispatch("fetchIsLoading", false);
-  
-  console.log("done");
 
+  console.log("done");
 }
 export async function forgotPasswordReset(email) {
   fetchSignInMethodsForEmail(auth, email)
@@ -164,30 +180,28 @@ export async function getAllUsersDecks(uid) {
   } else console.log("ERROR");
 }
 
-export async function uploadImgFirebase(file){
+export async function uploadImgFirebase(file) {
   //maybe a new naming convention
-  const name = new Date().toLocaleDateString() + '-' + file.name
-  const imgRef = ref(storage, 'Avatars/'+ name)
-  console.log(file)
+  const name = new Date().toLocaleDateString() + "-" + file.name;
+  const imgRef = ref(storage, "Avatars/" + name);
+  console.log(file);
   uploadBytes(imgRef, file).then((snapshot) => {
-    const filepath = snapshot.metadata.fullPath
-   
-    //push path to users avatar data
-    console.log(store)
-    changeAvatar(store.getters.getUserData.data.uid,filepath )
+    const filepath = snapshot.metadata.fullPath;
 
+    //push path to users avatar data
+    console.log(store);
+    changeAvatar(store.getters.getUserData.data.uid, filepath);
   });
 }
 
-export async function getAvatar(name){
-  console.log(name)
-  if(name == undefined)
-    return '../assets/defaultAvatar'
-  const imgRef = ref(storage, name)
+export async function getAvatar(name) {
+  console.log(name);
+  if (name == undefined) return "../assets/defaultAvatar";
+  const imgRef = ref(storage, name);
 
- getDownloadURL(imgRef).then((url =>{
-    console.log(url)
-    store.dispatch("fetchAvatar",url)
-    return url
-  }))
+  getDownloadURL(imgRef).then((url) => {
+    console.log(url);
+    store.dispatch("fetchAvatar", url);
+    return url;
+  });
 }
