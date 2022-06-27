@@ -18,20 +18,20 @@
             />
             <div class="passwords">
               <input
+                type="userName"
+                placeholder="User Name"
+                id="userName"
+                name="userName"
+                class="inputForm"
+                v-model="userName"
+              />
+              <input
                 type="password"
                 placeholder="password"
                 id="pwd"
                 name="pwd"
                 class="inputForm"
                 v-model="password"
-              />
-              <input
-                type="password"
-                placeholder="confirm password"
-                id="pwdConfirm"
-                name="pwdConfirm"
-                class="inputForm"
-                v-model="passwordConfirm"
               />
             </div>
           </div>
@@ -74,8 +74,8 @@
       return {
         isSignup: false,
         email: "",
+        userName: "",
         password: "",
-        passwordConfirm: "",
         lostEmail: "",
         emailCode: "",
         isForgotPassword: false,
@@ -112,10 +112,6 @@
           alert("Must enter in a vaild email");
           return false;
         }
-        if (this.password !== this.passwordConfirm) {
-          alert("Passwords do not match");
-          return;
-        }
         if (
           this.password.match(/[a-z]/g) &&
           this.password.match(/[A-Z]/g) &&
@@ -124,7 +120,7 @@
           this.password.length >= 8
         ) {
           store.dispatch("fetchIsLoading", true);
-          createUser(this.email, this.password);
+          createUser(this.email,this.userName, this.password);
           alert("created");
           this.$router.push({ name: "home" });
         } else {
