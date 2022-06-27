@@ -15,7 +15,7 @@
           <div class="formInputs">
             <input
               type="text"
-              placeholder="email"
+              placeholder="username"
               id="email"
               name="email"
               class="inputForm"

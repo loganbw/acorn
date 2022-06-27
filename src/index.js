@@ -106,7 +106,7 @@ export async function createUser(email, userName, password) {
       const imgRef = ref(storage, "Avatars/defaultAvatar.svg");
        getDownloadURL(imgRef).then((url) => {
         updateProfile(user,{
-          userName: userName,
+          displayName: userName,
           photoURL: url
         })
       });
