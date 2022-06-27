@@ -1,9 +1,6 @@
 <template>
-  <section>
-    <div>
-      <router-view></router-view>
-    </div>
-  </section>
+  <header></header>
+  <RouterView />
 </template>
 <script>
   export default { components: {  } };

@@ -10,9 +10,9 @@
           <div class="formInputs">
             <input
               type="text"
-              placeholder="username"
-              id="username"
-              name="username"
+              placeholder="email"
+              id="email"
+              name="email"
               class="inputForm"
               v-model="email"
             />
@@ -45,10 +45,29 @@
         <span> <a @click="routeLogin">Have an Account?</a></span>
       </div>
     </div>
+    <div v-if="isForgotPassword">
+      <div v-if="!this.$store.getters.getIsEmailTrue">
+        <div class="modalBack" @click="forgotPassword"></div>
+        <form @submit.prevent="forgotPasswordSubmit">
+          <input
+            type="email"
+            placeholder="email"
+            id="emailReset"
+            name="emailReset"
+            class="emailReset"
+            v-model="lostEmail"
+          />
+          <input type="submit" value="Submit" class="inputButton" />
+        </form>
+      </div>
+
+    </div>
   </div>
 </template>
 <script>
-import {createUser} from "../../index.js";
+  import { createUser,forgotPasswordReset } from "../../index.js";
+  import store from "../../store/index.js";
+
   export default {
     emits: ["isSignupFlip"],
     data() {
@@ -57,15 +76,30 @@ import {createUser} from "../../index.js";
         email: "",
         password: "",
         passwordConfirm: "",
+        lostEmail: "",
+        emailCode: "",
+        isForgotPassword: false,
       };
     },
     methods: {
-      routeLogin(){
-        return this.$router.push({name: 'home'})
+      routeLogin() {
+        this.$router.push({ name: "home" });
       },
       forgotPassword() {
-        alert("need module for password recovery")
-        return;
+        this.isForgotPassword = !this.isForgotPassword;
+      },
+      forgotPasswordSubmit() {
+        // needs to have check for email not being correct before moving on
+        if(this.validateEmail(this.lostEmail)){
+          store.dispatch("fetchIsLoading", true);
+          forgotPasswordReset(this.lostEmail);
+        }
+        
+      },
+      validateEmail(email) {
+        return email.match(
+          /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+        );
       },
       //these alerts need to be a modal instead or a tiny error message under the pokeball
       signupWithPassword(form) {
@@ -74,20 +108,30 @@ import {createUser} from "../../index.js";
           form.email.focus();
           return false;
         }
+        if (!this.validateEmail(this.email)) {
+          alert("Must enter in a vaild email");
+          return false;
+        }
         if (this.password !== this.passwordConfirm) {
           alert("Passwords do not match");
           return;
         }
-        if (this.password.match(/[a-z]/g) && this.password.match(/[A-Z]/g) && this.password.match(/[0-9]/g) && 
-                this.password.match(/[^a-zA-Z\d]/g) && this.password.length >= 8)
-            {
-                createUser(this.email,this.password)
-                alert("created")
-                return this.$router.push({name: 'home'})
-            }
-            else{
-              alert("Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number.")
-            }
+        if (
+          this.password.match(/[a-z]/g) &&
+          this.password.match(/[A-Z]/g) &&
+          this.password.match(/[0-9]/g) &&
+          this.password.match(/[^a-zA-Z\d]/g) &&
+          this.password.length >= 8
+        ) {
+          store.dispatch("fetchIsLoading", true);
+          createUser(this.email, this.password);
+          alert("created");
+          this.$router.push({ name: "home" });
+        } else {
+          alert(
+            "Invaild Password, Password must contain at least 8 characters, including at least one uppercase letter and one lowercase letter, one special character, and one number."
+          );
+        }
         //maybe adding a email checker? like verify-email.org api
       },
     },
