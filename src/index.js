@@ -97,8 +97,7 @@ async function retrieveAvatar(user) {
 }
 // function to create users
 //need to set uname
-export async function createUser(email, password) {
-  const uid = "";
+export async function createUser(email, userName, password) {
   await createUserWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
@@ -107,6 +106,7 @@ export async function createUser(email, password) {
       const imgRef = ref(storage, "Avatars/defaultAvatar.svg");
        getDownloadURL(imgRef).then((url) => {
         updateProfile(user,{
+          displayName: userName,
           photoURL: url
         })
       });
