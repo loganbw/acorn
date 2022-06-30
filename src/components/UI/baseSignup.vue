@@ -68,7 +68,7 @@
   import { createUser,forgotPasswordReset } from "../../index.js";
   import store from "../../store/index.js";
 
-  export default {
+  export default 
     emits: ["isSignupFlip"],
     data() {
       return {

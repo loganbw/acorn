@@ -67,6 +67,7 @@
       },
       loginUser() {
         store.dispatch("fetchIsLoading", true);
+        //this comes from the firebase index and the firebase index function needs to be changed to fit username instead of email
         signInUser(this.email, this.password);
       },
     },
