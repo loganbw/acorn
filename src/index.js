@@ -18,7 +18,8 @@ import {
   fetchSignInMethodsForEmail,
   onAuthStateChanged,
   sendPasswordResetEmail,
-  updateProfile
+  updateProfile,
+  signOut
 } from "firebase/auth";
 import router from "./router";
 import store from "../src/store/index";
@@ -54,6 +55,7 @@ async function getUsers(db) {
 
 //signs in user
 export async function signInUser(email, password) {
+  console.log("AUTH " + auth)
   signInWithEmailAndPassword(auth, email, password)
     .then((userCredential) => {
       // Signed in
@@ -72,6 +74,13 @@ export async function signInUser(email, password) {
     
     console.log("user: " + userRoot)
   store.dispatch("isLoading", false);
+}
+export function  signOutUser(){
+  signOut(auth).then(()=>{
+    console.log("signout successfull")
+  }).catch((err) =>{
+    console.log(err)
+  })
 }
 //validates signed user
 onAuthStateChanged(auth,(user) => {
