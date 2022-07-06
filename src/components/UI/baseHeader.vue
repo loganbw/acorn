@@ -1,24 +1,29 @@
 <template>
- 
   <div class="header">
     <div class="title">
       <h2>PokéVue</h2>
-    </div>     
+    </div>
     <div class="rightContain">
-      
-        <router-link :to="{ name: 'Play' }">Play</router-link>
-        <router-link :to="{ name: 'Deck' }">Deck Builder</router-link>
-        <router-link :to="{ name: 'Account' }">Account</router-link>
-    
+      <router-link :to="{ name: 'Play' }">Play</router-link>
+      <router-link :to="{ name: 'Deck' }">Deck Builder</router-link>
+      <router-link :to="{ name: 'Account' }">Account</router-link>
+      <router-link @click="logout" :to="{ name: 'home' }">Logout</router-link>
     </div>
   </div>
 </template>
 <script>
-  export default {};
+  import { signOutUser } from "../../index.js";
+  export default {
+    methods: {
+      logout() {
+        signOutUser();
+      },
+    },
+  };
 </script>
 <style scoped>
-   .divRoute{
-    width:85%;
+  .divRoute {
+    width: 85%;
   }
   .header {
     display: flex;
@@ -29,16 +34,16 @@
     background-image: linear-gradient(-60deg, rgb(39 39 39) 62%, #ededed 62%);
     z-index: 2;
   }
-  .bgStripe{
-   position: absolute;
+  .bgStripe {
+    position: absolute;
     background-image: linear-gradient(49deg, rgb(240 231 231) 62%, #fec10b 62%);
     z-index: 2;
     height: 101%;
     width: 40%;
     left: 12%;
   }
-  .bgStripe2{
-   position: absolute;
+  .bgStripe2 {
+    position: absolute;
     background-image: linear-gradient(49deg, rgb(240 231 231) 62%, #fec10b 62%);
     z-index: 2;
     height: 101%;
@@ -49,7 +54,7 @@
     display: flex;
     align-items: center;
     margin-right: 2%;
-    width: 20%;
+    width: 25%;
     text-align: center;
   }
   img {
@@ -77,5 +82,4 @@
   .routeNav {
     width: 85% !important;
   }
- 
 </style>
