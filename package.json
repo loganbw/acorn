@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@testing-library/vue": "^6.6.0",
+    "@vueuse/core": "^8.9.0",
     "axios": "^0.27.2",
     "bootstrap": "^5.2.0-beta1",
     "firebase": "^9.8.1",
